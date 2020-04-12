@@ -45,7 +45,7 @@ _Agrega notas adicionales sobre como hacer deploy_
 
 ## Construido con 🛠️
 
-_Menciona las herramientas que utilizaste para crear tu proyecto_
+_Para la creación del proyecto se ha utilizado [Stack MERN](https://platzi.com/blog/que-es-mern-stack-javascript/) que está constituido por las siguientes herramientas:_
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
 * [Maven](https://maven.apache.org/) - Manejador de dependencias
@@ -57,7 +57,7 @@ _Menciona las herramientas que utilizaste para crear tu proyecto_
 
 ## Participantes 😊
 
-* **Juana Lopez Redondo** - *Directora del proyecto*
+* **Juana López Redondo** - *Directora del proyecto*
 * **Savíns Puertas Martín** - *Codirector del proyecto*
 * **Pilar Martínez Ortigosa** - *Proporcionadora de ideas para el proyecto*
 * **Juan Francisco Sanjuan Estrada** - *Proporcionador de ideas para el proyecto*
