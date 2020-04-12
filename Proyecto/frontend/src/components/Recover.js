@@ -31,7 +31,7 @@ export default class Recover extends Component {
                         </div>
                         <div className="card-body">
                             <h2 className="text-center">
-                                    <span className="fas fa-key"></span>  Nueva contraseña
+                                    <span className="fas fa-key"></span>  Recuperar contraseña
                             </h2>
 
                             <br/>
@@ -40,7 +40,10 @@ export default class Recover extends Component {
 
                             <form action= {process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_RECOVER} method="post">
                                     <input type="hidden" name="email" value={this.vars['email']}/>
-                                    <input type="hidden" name="token" value={this.vars['token']}/>
+                                    <div className="form-group">
+                                        <label htmlFor="password">Código de recuperación (revisa tu correo):</label>
+                                        <input type="text" name="token" className="form-control" required/>
+                                    </div>
                                     <div className="form-group">
                                         <label htmlFor="password">Contraseña:</label>
                                         <input type="password" name="password" className="form-control" required/>

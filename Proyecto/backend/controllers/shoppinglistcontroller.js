@@ -28,7 +28,19 @@ sendEmail = function(req, res){
         from: 'SmartFridge',
         to: process.env.EMAIL_TO_RECEIVE_SHOPPINGLIST,
         subject: 'SmartFridge: Producto agotado.',
-        text: msg
+        html:
+        `<html>
+            <body style="display: flex; align-items: center; background: #E0EAFC; height: 600px;">
+                <div style="position: relative; margin: auto; width: 700px; background-color: white; border-radius: 10px 10px 10px 10px;">
+                    <div style="text-align: center; margin: 0px;">
+                        <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
+                        <h1 style="margin: 0px;">SmartFridge</h1>
+                        <h3 style="margin: 0px;">Producto agotándose</h3>
+                        <p style="margin-bottom: 25px;">`+msg+`</p>
+                    </div>
+                </div>
+            </body>
+        </html>`
     };
 
     transporter.sendMail(mailOptions, function(error, info){

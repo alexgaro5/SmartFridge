@@ -112,7 +112,7 @@ productCtrl.updateProduct = async (req, res) => {
     //Si se ha actualizado la cantidad y esta por debajo del mínimo, se añade a la lista de la compra. Si está por encima, se elimina si existe.
     const {createProductToShoppingList, deleteProductToShoppingList} = require('./shoppinglistcontroller');
     if(amount <= process.env.MIN_PRODUCT_UNIT){
-        createProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), name: pr.name, msg: "El producto '"+pr.name+"' se está agotando en la nevera.", end: 'false'}});
+        createProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), name: pr.name, msg: "El producto '"+pr.name+"' se está agotando en el frigorífico.", end: 'false'}});
     }else{
         deleteProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), end: 'false'}});
     }

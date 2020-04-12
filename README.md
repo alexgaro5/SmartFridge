@@ -34,6 +34,10 @@ _Para la creación del proyecto se ha utilizado [Stack MERN](https://platzi.com/
 
 _Adicionamiente, hemos usado otras librerias como [Axios](https://github.com/axios/axios) para enviar peticiones al servidor, o [BootStrap](https://getbootstrap.com/) para usar clases predefinidas de CSS._
 
+## Licencia 📄
+
+Este proyecto está bajo la Licencia MIT - mira el archivo [LICENSE.md](https://github.com/alexgaro5/SmartFridge/blob/master/LICENSE.md) para detalles
+
 ## Autor ✒️
 
 * **Rafael Alejandro García Rodríguez** - *Creador del proyecto*

@@ -28,7 +28,20 @@ forgetCtrl.sendEmail = function(req, res){
         from: 'SmartFridge',
         to: email,
         subject: 'SmartFridge: Recuperar contraseña.',
-        text: 'Para recuperar la contraseña, haga click en el siguiente enlace: ' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?email='+email+'&token='+token
+        html: 
+        `<html>
+            <body style="display: flex; align-items: center; background: #E0EAFC; height: 600px;">
+                <div style="position: relative; margin: auto; width: 700px; height: 300px; background-color: white; border-radius: 10px 10px 10px 10px;">
+                    <div style="text-align: center; margin: 0px;">
+                        <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
+                        <h1 style="margin: 0px;">SmartFridge</h1>
+                        <h3 style="margin: 0px;">¿Recupera tu contraseña?</h3>
+                        <p>Si solicitaste un restablecimiento de contraseña para su cuenta, utiliza el siguiente código de recuperación en la página de restrablecer contraseña. Si no solicitaste esto, ignora este correo electrónico.</p>
+                        <h4 style="margin: 0px;">Cógido de recuperación: `+token+`</h4>
+                    </div>
+                </div>
+            </body>
+        </html>`
     };
 
     transporter.sendMail(mailOptions, function(error, info){
@@ -66,7 +79,7 @@ forgetCtrl.createEmailToRecover  = async (req, res) => {
         await usr.save();
         forgetCtrl.sendEmail({email, token});
 
-        res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/forget?msg=success');
+        res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?email='+email);
     }
     res.end();
 }

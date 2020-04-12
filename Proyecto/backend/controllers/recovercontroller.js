@@ -27,7 +27,7 @@ recoverCtrl.changePassword  = async (req, res) => {
                 usr.save();
                 res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?msg=success');
             }else{
-                res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?msg=wrongpassword&email='+email+'&token='+token);
+                res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?msg=wrongpassword&email='+email);
             }
         }else{
             res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/login'); 
