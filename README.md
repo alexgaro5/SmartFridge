@@ -9,39 +9,20 @@ _El objetivo principal de este proyecto es implementar o desarrollar un prototip
 
 _Estas instrucciones te permitirán obtener una copia del proyecto en funcionamiento en tu máquina local para propósitos de desarrollo y pruebas._
 
-Mira **Despliegue** para conocer como desplegar el proyecto.
-
 
 ### Pre-requisitos 📋
 
-_Que cosas necesitas para instalar el software y como instalarlas_
+_Para que el sistema funcione correctamente, debemos de tener instalado MongoDB y NodeJS en nuestro equipo_
 
-```
-Da un ejemplo
-```
-
-### Instalación 🔧
-
-_Una serie de ejemplos paso a paso que te dice lo que debes ejecutar para tener un entorno de desarrollo ejecutandose_
-
-_Dí cómo será ese paso_
-
-```
-Da un ejemplo
-```
-
-_Y repite_
-
-```
-hasta finalizar
-```
-
-_Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
-
+_Podemos descargar MongoDB haciendo [click aquí](https://www.mongodb.com/download-center/community) y NodeJS haciendo [click aquí](https://nodejs.org/es/download/current/)
 
 ### Despliegue 📦
 
-_Agrega notas adicionales sobre como hacer deploy_
+_Una vez que cumplimos los pre-requisitos y tenemos el proyecto descargado en forma local, debemos de ejecutar los .bat que hay en la carpeta raiz para ejecutar la comunicación entre los cinco controladores, el back-end y el front-end._
+
+_Los controladores, el back-end y el front-end vienen configuradas con una IPs y unos puertos especificos. Si en nuestro caso es necesario cambiarlos, podemos hacerlo en los archivos .env dentro de la carpeta 'Proyecto' y en el .env dentro de la carpeta 'frontend'. También deberemos de cambiarlo del código de cada Arduino y volver a cargar el código en estos._
+
+_Una vez todo ejecutado, para entrar a la interfaz, debemos que escribir en un navegador la IP y el puerto configurado para el front-end. Si no se ha cambiado, es [192.168.1.225:4000](192.168.1.225:4000). De esta manera, tendremos acceso a la interfaz._ 
 
 ## Construido con 🛠️
 
