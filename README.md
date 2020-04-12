@@ -45,11 +45,13 @@ _Agrega notas adicionales sobre como hacer deploy_
 
 ## Construido con 🛠️
 
-_Para la creación del proyecto se ha utilizado [Stack MERN](https://platzi.com/blog/que-es-mern-stack-javascript/) que está constituido por las siguientes herramientas:_
+_Para la creación del proyecto se ha utilizado [Stack MERN](https://platzi.com/blog/que-es-mern-stack-javascript/), que está constituido por las siguientes herramientas:_
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - El framework web usado
-* [Maven](https://maven.apache.org/) - Manejador de dependencias
-* [ROME](https://rometools.github.io/rome/) - Usado para generar RSS
+* [MongoDB](https://www.mongodb.com/es) - Es la base de datos
+* [ExpressJS](https://expressjs.com/es/) y [NodeJS](https://nodejs.org/es/) - Se utiliza para administrar el back-end
+* [React](https://es.reactjs.org/) - Se utiliza para la creación del front-end
+
+_Adicionamiente, hemos usado otras librerias como [Axios](https://github.com/axios/axios) para enviar peticiones al servidor, o [BootStrap](https://getbootstrap.com/) para usar clases predefinidas de CSS._
 
 ## Autor ✒️
 
