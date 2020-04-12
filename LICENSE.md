@@ -1,4 +1,4 @@
-La licencia MIT (MIT)
+Licencia MIT (MIT)
 
 Copyright (c) 2020 - Rafael Alejandro García Rodríguez
 
