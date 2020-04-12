@@ -1,0 +1,13 @@
+/*El color de fundo de la página web*/
+body{
+    background: #E0EAFC;  
+    background: -webkit-linear-gradient(to right, #CFDEF3, #E0EAFC);  
+    background: linear-gradient(to right, #CFDEF3, #E0EAFC); 
+}
+
+/* Para quitar el efecto a los hiperenlaces cuando te interese, aplicar la clase nolink*/
+.nolink{
+    text-decoration: none
+}
+.nolink:hover { color: black; font-family: arial; text-decoration: none }
+.nolink:visited {color: black;  font-family: arial; text-decoration: none }
