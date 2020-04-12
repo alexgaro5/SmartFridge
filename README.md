@@ -1,3 +1,6 @@
+Universidad de Almería ®
+---
+
 # SmartFridge: Reconocimiento de acciones en un frigorífico y toma de decisiones en un ambiente inteligente.
 
 _El objetivo principal de este proyecto es implementar o desarrollar un prototipo de frigorífico inteligente, denominado SmartFridge. Para esto será necesario integrar una serie de dispositivos en el frigorífico (entre ellos algunos sensores), procesar los datos generados e incorporar diferentes acciones o funciones con los datos obtenidos._
@@ -36,7 +39,7 @@ hasta finalizar
 _Finaliza con un ejemplo de cómo obtener datos del sistema o como usarlos para una pequeña demo_
 
 
-## Despliegue 📦
+### Despliegue 📦
 
 _Agrega notas adicionales sobre como hacer deploy_
 
