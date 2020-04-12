@@ -53,17 +53,14 @@ _Menciona las herramientas que utilizaste para crear tu proyecto_
 
 ## Autor ✒️
 
-_Menciona a todos aquellos que ayudaron a levantar el proyecto desde sus inicios_
+* **Rafael Alejandro García Rodríguez** - *Creador del proyecto*
 
-* **Andrés Villanueva** - *Trabajo Inicial* - [villanuevand](https://github.com/villanuevand)
-* **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
+## Participantes 😊
 
-También puedes mirar la lista de todos los [contribuyentes](https://github.com/your/project/contributors) quíenes han participado en este proyecto. 
-
-## Participantes ❤️
-
-* **Andrés Villanueva** - *Trabajo Inicial* - [villanuevand](https://github.com/villanuevand)
-* **Fulanito Detal** - *Documentación* - [fulanitodetal](#fulanito-de-tal)
+* **Juana Lopez Redondo** - *Directora del proyecto*
+* **Savíns Puertas Martín** - *Codirector del proyecto*
+* **Pilar Martínez Ortigosa** - *Proporcionadora de ideas para el proyecto*
+* **Juan Francisco Sanjuan Estrada** - *Proporcionador de ideas para el proyecto*
 
 ---
 _Universidad de Almería ®_
