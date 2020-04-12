@@ -18,9 +18,9 @@ _Podemos descargar MongoDB haciendo [click aquí](https://www.mongodb.com/downlo
 
 ### Ejecución 🔧
 
-_Una vez que cumplimos los pre-requisitos y tenemos el proyecto descargado en forma local, debemos de ejecutar los .bat que hay en la carpeta raiz para ejecutar la comunicación entre los cinco controladores, el back-end y el front-end._
+_Una vez que cumplimos los pre-requisitos y tenemos el proyecto descargado en forma local, debemos de ejecutar los .bat que hay en la carpeta raiz para crear una comunicación entre los cinco controladores, el back-end y el front-end._
 
-_Los controladores, el back-end y el front-end vienen configuradas con una IPs y unos puertos especificos. Si en nuestro caso es necesario cambiarlos, podemos hacerlo en los archivos .env dentro de la carpeta 'Proyecto' y en el .env dentro de la carpeta 'frontend'. También deberemos de cambiarlo del código de cada Arduino y volver a cargar el código en estos._
+_Los controladores, el back-end y el front-end vienen configurados con unas IPs y unos puertos especificos. Si es necesario cambiarlos, podemos hacerlo en el archivos .env dentro de la carpeta 'Proyecto' y en el .env dentro de la carpeta 'frontend'. También deberemos de cambiarlo en el código de cada Arduino y volver a cargar el código en estos._
 
 _Una vez todo ejecutado, para entrar a la interfaz, debemos que escribir en un navegador la IP y el puerto configurado para el front-end. Si no se ha cambiado, es [192.168.1.225:4000](http://192.168.1.225:4000). De esta manera, tendremos acceso a la interfaz._ 
 
