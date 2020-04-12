@@ -14,15 +14,15 @@ _Estas instrucciones te permitirán obtener una copia del proyecto en funcionami
 
 _Para que el sistema funcione correctamente, debemos de tener instalado MongoDB y NodeJS en nuestro equipo_
 
-_Podemos descargar MongoDB haciendo [click aquí](https://www.mongodb.com/download-center/community) y NodeJS haciendo [click aquí](https://nodejs.org/es/download/current/)
+_Podemos descargar MongoDB haciendo [click aquí](https://www.mongodb.com/download-center/community) y NodeJS haciendo [click aquí](https://nodejs.org/es/download/current/)_
 
-### Despliegue 📦
+### Ejecución 🔧
 
 _Una vez que cumplimos los pre-requisitos y tenemos el proyecto descargado en forma local, debemos de ejecutar los .bat que hay en la carpeta raiz para ejecutar la comunicación entre los cinco controladores, el back-end y el front-end._
 
 _Los controladores, el back-end y el front-end vienen configuradas con una IPs y unos puertos especificos. Si en nuestro caso es necesario cambiarlos, podemos hacerlo en los archivos .env dentro de la carpeta 'Proyecto' y en el .env dentro de la carpeta 'frontend'. También deberemos de cambiarlo del código de cada Arduino y volver a cargar el código en estos._
 
-_Una vez todo ejecutado, para entrar a la interfaz, debemos que escribir en un navegador la IP y el puerto configurado para el front-end. Si no se ha cambiado, es [192.168.1.225:4000](192.168.1.225:4000). De esta manera, tendremos acceso a la interfaz._ 
+_Una vez todo ejecutado, para entrar a la interfaz, debemos que escribir en un navegador la IP y el puerto configurado para el front-end. Si no se ha cambiado, es [192.168.1.225:4000](http://192.168.1.225:4000). De esta manera, tendremos acceso a la interfaz._ 
 
 ## Construido con 🛠️
 
