@@ -23,8 +23,10 @@ export default class Main extends Component {
     //Envia una peticion para obtener la actividad del usuario que está logueado y añadirla a la variable "act"
     getActivity = async () => {
         const usr = document.cookie.toString().split("=")[1];
-        const act = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_ACTIVITY + usr);
-        this.setState({act: act.data});
+        if(usr !== undefined){
+            const act = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_ACTIVITY + usr);
+            this.setState({act: act.data});
+        }
     }
 
     //Envia una peticion para eliminar la actividad del usuario que está logueado.

@@ -154,6 +154,10 @@ export default class Products extends Component {
                                         <label htmlFor="name">Nombre de producto:</label>
                                         <input type="text" name="name" className="form-control" required/>
                                     </div>
+                                    <div className="form-group">
+                                        <label htmlFor="email">Cantidad:</label>
+                                        <input type="number" name="amount" defaultValue='0' min='0' max='100' className="form-control" required/>
+                                    </div>
                                     <div className='text-center'>
                                         <input type="submit" value="Añadir" className="btn btn-primary btn-lg" />
                                     </div>

@@ -4,6 +4,8 @@
 #include <WiFiNINA.h>
 //Libreria para enviar paquetes al backend
 #include <WiFiUdp.h>
+//Time
+
 
 //Diferentes pines a utilizar
 const int relojPesoPin1 = 2; 
@@ -27,6 +29,8 @@ float pesoKg1, anteriorPesoKg1, pesoKg2, anteriorPesoKg2;
 float factorDeCalibracion1 = -24000;
 float factorDeCalibracion2 = -24000;
 int nivelAnt, nivel;
+char writeBuffer[34];
+unsigned long previousMillis = 0;
 
 void setup() {
 
@@ -83,6 +87,15 @@ void setup() {
 }
 
 void loop() {
+
+
+  if((millis() - previousMillis) > 10000){
+    Udp.beginPacket(ipSend, localPort);
+    Udp.write("A");
+    Udp.endPacket();
+    previousMillis = millis();
+  }
+  
   //Obtenemos el peso en los diferentes sensores que tenemos, y el nivel del agua
   pesoKg1 = peso1.get_units();
   pesoKg2 = peso2.get_units();

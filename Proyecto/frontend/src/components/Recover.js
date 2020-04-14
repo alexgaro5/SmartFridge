@@ -27,7 +27,7 @@ export default class Recover extends Component {
                 <div className='col-sm-9 mx-auto'>
                     <div className='card mt-5'>
                         <div className='card-header'>
-                            <p className='my-auto'><a className='nolink' href="/login"><span className='fas fa-chevron-circle-left'></span></a></p>
+                            <p className='my-auto'><a className='nolink' href="/forget"><span className='fas fa-chevron-circle-left'></span></a></p>
                         </div>
                         <div className="card-body">
                             <h2 className="text-center">

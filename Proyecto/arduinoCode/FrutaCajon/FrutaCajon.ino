@@ -77,6 +77,14 @@ void setup() {
 }
 
 void loop() {
+
+  if((millis() - previousMillis) > 10000){
+    Udp.beginPacket(ipSend, localPort);
+    Udp.write("A");
+    Udp.endPacket();
+    previousMillis = millis();
+  }
+  
   //Obtenemos el peso en los diferentes sensores que tenemos.
   pesoKg1 = peso1.get_units();
   pesoKg2 = peso2.get_units();

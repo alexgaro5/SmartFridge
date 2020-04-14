@@ -47,7 +47,7 @@ productCtrl.getProductByName = async (req, res) => {
  * Devolución del método: Nada.
 */
 productCtrl.createProduct = async (req, res) => {
-    var {name} = req.body;
+    var {name, amount} = req.body;
 
     //Buscamos si existe el producto.
     const pr =  await productCtrl.getProductByName(name);
@@ -57,7 +57,7 @@ productCtrl.createProduct = async (req, res) => {
         const newProduct = new Product({
             id: await productCtrl.getAId(),
             name: name,
-            amount: 0
+            amount: amount
         });
         await newProduct.save();
         
@@ -111,11 +111,16 @@ productCtrl.updateProduct = async (req, res) => {
 
     //Si se ha actualizado la cantidad y esta por debajo del mínimo, se añade a la lista de la compra. Si está por encima, se elimina si existe.
     const {createProductToShoppingList, deleteProductToShoppingList} = require('./shoppinglistcontroller');
-    if(amount <= process.env.MIN_PRODUCT_UNIT){
-        createProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), name: pr.name, msg: "El producto '"+pr.name+"' se está agotando en el frigorífico.", end: 'false'}});
-    }else{
-        deleteProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), end: 'false'}});
-    }
+    const {getMinProductUnit} = require('./variablecontroller');
+
+    getMinProductUnit().then(function(minamount){
+        
+        if(amount <= minamount){
+            createProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), name: pr.name, msg: "El producto '"+pr.name+"' se está agotando en el frigorífico.", end: 'false'}});
+        }else{
+            deleteProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), end: 'false'}});
+        }
+    });
 
     //Si end = true, se envia un end, si no, se reenvia a una dirección.
     if(end == 'true'){

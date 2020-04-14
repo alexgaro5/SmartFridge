@@ -2,6 +2,9 @@
 const path = __dirname.substring(0, (process.cwd().length - 28)) + '.env';
 require('dotenv').config({path: path});
 
+//Libreria para enviar correos electrónicos.
+const nodemailer = require('nodemailer');
+
 //Sirve para hacer peticiones GET, POST, PUT y DELETE al backend.
 const axios = require('axios');
 
@@ -10,8 +13,14 @@ const dgram = require('dgram');
 const client = dgram.createSocket('udp4');
 const server = dgram.createSocket('udp4');
 
+//Variables necesarias.
+var lastDateConnection, sendemail;
+
 //Abrimos conexión con la Arduino.
 server.bind(process.env.PORT_RASPBERRY_RFID_ARDUINO, process.env.IP_RASPBERRY);
+
+//Comprobar cada hora si el controlador tiene comunicación.
+setInterval(() => CheckControllerStatus(), 3600000);
 
 //Si hay algún error en la conexión, nos informará por consola cual es.
 server.on('error', (err) => {
@@ -21,11 +30,17 @@ server.on('error', (err) => {
 
 //Si la conexión se crea con éxito, nos lo notificará por consola.
 server.on('listening', () => {
-    console.log('Connected.');
+    console.log('Connection is opened');
 });
 
 //Si llega un paquete de la Arduino...
 server.on('message', (str) => {
+
+    //Si nos llega un paquete para afirmar que tiene conexión, se actualiza la fecha de la ultima conexión.
+    if(str.toString()[0] == 'A'){
+        lastDateConnection = new Date();
+        sendemail = true;
+    }
 
     //Mostramos el mensaje por consola para obtener mas información.
     str = str.toString();
@@ -156,3 +171,54 @@ server.on('message', (str) => {
         }
     }
 });
+
+//Se comprueba el tiempo que ha pasasdo desde la ultima conexión del controlador. Si es mayor a un día, se envía un aviso por correo.
+function CheckControllerStatus(){
+    const currentDate = new Date();
+    
+    if(lastDateConnection != null){
+        var difference = currentDate.getTime() - lastDateConnection.getTime();
+        difference = difference / 3600000;
+
+        if(difference >= 24 && sendemail){
+            sendemail = false;
+            sendEmail();
+        }
+    }
+}
+
+//Para enviar el correo de aviso.
+function sendEmail(req, res){
+
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'smartfridgeual@gmail.com',
+            pass: 'Smartfridgeual1'
+        }
+    });
+
+    var mailOptions = {
+        from: 'SmartFridge',
+        to: process.env.EMAIL_TO_RECEIVE_SHOPPINGLIST,
+        subject: process.env.SUBJECT_RFID_CONTROLLER_EMAIL,
+        html:
+        `<html>
+            <body style="display: flex; align-items: center; background: #E0EAFC; height: 600px;">
+                <div style="position: relative; margin: auto; width: 1000px; background-color: white; border-radius: 10px 10px 10px 10px;">
+                    <div style="text-align: center; margin: 0px;">
+                        <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
+                        <h1 style="margin: 0px;">SmartFridge</h1>
+                        <h2 style="margin-bottom: 25px; color: red;">`+ process.env.MSG_RFID_CONTROLLER_EMAIL +`</h2>
+                    </div>
+                </div>
+            </body>
+        </html>`
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error){
+            console.log(error);
+        }
+    });
+};

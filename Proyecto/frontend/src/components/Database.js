@@ -9,52 +9,60 @@ export default class Tables extends Component {
     
     //Envia la petición para eliminar todos los registros del cajón de fruta.
     deleteFruits = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_FRUITLEFT);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_FRUITRIGHT);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_FRUITLEFT);
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_FRUITRIGHT);
+        }
     }
 
     //Envia la petición para eliminar todos los registros del cajón de verdura.
     deleteVegetables = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_VEGETABLESLEFT);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_VEGETABLESRIGHT);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_VEGETABLESLEFT);
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_VEGETABLESRIGHT);
+        }
     }
 
     //Envia la petición para eliminar todos los registros del cajón de embutido.
     deleteSausages = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_SAUSAGES);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_SAUSAGES);
+        }
     }
 
     //Envia la petición para eliminar todos los registros de los refrescos.
     deleteRefreshments = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_REFRESHMENTS);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_REFRESHMENTS);
+        }
     }
 
     //Envia la petición para eliminar todos los registros del deposito de agua.
     deleteWater = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_LEVELWATER);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_LEVELWATER);
+        }
     }
 
     //Envia la petición para eliminar todos los registros de la leche.
     deleteMilk = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_MILK);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_MILK);
+        }
     }
 
     //Envia la petición para eliminar todos los registros de los huevos.
     deleteEggs = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_EGGS);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_EGGS);
+        }
     }
 
     //Envia la petición para eliminar todos los registros de la lista de la compra.
     deleteShoppingList = async () => {
-        window.alert(process.env.REACT_APP_RESET_SUCCESS);
-        await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_SHOPPINGLIST);
+        if(window.confirm(process.env.REACT_APP_RESET_SUCCESS)){
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_SHOPPINGLIST);
+        }
     }
 
     render() {
@@ -66,7 +74,7 @@ export default class Tables extends Component {
                         <div className='card mt-5'>
                             <div className="card-body">
                                 <div className="text-center">
-                                    <h4><span className="fas fa-table"></span> Limpiar tablas</h4>
+                                    <h4><span className="fas fa-database"></span> Limpiar datos</h4>
 
                                     <hr/>
 

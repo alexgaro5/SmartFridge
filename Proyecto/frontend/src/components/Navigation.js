@@ -39,7 +39,10 @@ export default class Navigation extends Component {
                                     <Link className="nav-link" to="/user"> Usuarios </Link> 
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/tables"> Tablas </Link> 
+                                    <Link className="nav-link" to="/database"> Datos </Link> 
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/variable"> Variables </Link> 
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="" onClick={() => this.logout()}>Cerrar sesión</Link>

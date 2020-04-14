@@ -19,7 +19,8 @@ import EditProduct from './components/EditProduct';
 import Labels from './components/Labels';
 import EditLabel from './components/EditLabel';
 import Login from './components/Login';
-import Tables from './components/Tables';
+import Database from './components/Database';
+import Variable from './components/Variable';
 
 
 const someone = isSomeoneConnected();
@@ -48,7 +49,8 @@ function App() {
         <Route path="/recover" exact component={Recover}/>
         <Route path="/user" exact component={User}/>
         <Route path="/edituser" exact component={EditUser}/>
-        <Route path="/tables" exact component={Tables}/>
+        <Route path="/database" exact component={Database}/>
+        <Route path="/variable" exact component={Variable}/>
       </div>
     </Router>
   );

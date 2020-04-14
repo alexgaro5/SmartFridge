@@ -35,5 +35,6 @@ app.use(process.env.RECOVER, require('./routes/recover'))
 app.use(process.env.CARD, require('./routes/card'))
 app.use(process.env.SHOPPINGLIST, require('./routes/shoppinglist'))
 app.use(process.env.ACTIVITY, require('./routes/activity'))
+app.use(process.env.VARIABLE, require('./routes/variable'))
 
 module.exports = app;

@@ -31,12 +31,12 @@ sendEmail = function(req, res){
         html:
         `<html>
             <body style="display: flex; align-items: center; background: #E0EAFC; height: 600px;">
-                <div style="position: relative; margin: auto; width: 700px; background-color: white; border-radius: 10px 10px 10px 10px;">
+                <div style="position: relative; margin: auto; width: 1000px; background-color: white; border-radius: 10px 10px 10px 10px;">
                     <div style="text-align: center; margin: 0px;">
                         <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
                         <h1 style="margin: 0px;">SmartFridge</h1>
-                        <h3 style="margin: 0px;">Producto agotándose</h3>
-                        <p style="margin-bottom: 25px;">`+msg+`</p>
+                        <h1 style="margin: 0px;">Producto agotándose</h1>
+                        <h2 style="margin-bottom: 25px; color: red;">`+msg+`</h2>
                     </div>
                 </div>
             </body>

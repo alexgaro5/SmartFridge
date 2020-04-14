@@ -79,6 +79,13 @@ void setup() {
 
 void loop() {
 
+  if((millis() - previousMillis) > 10000){
+    Udp.beginPacket(ipSend, localPort);
+    Udp.write("A");
+    Udp.endPacket();
+    previousMillis = millis();
+  }
+
   //Creamos las variables 'message' y 'empty' 
   byte message[len];
   byte empty[len];
