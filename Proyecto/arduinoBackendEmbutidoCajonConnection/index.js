@@ -50,12 +50,19 @@ server.on('message', (str) => {
         if(split[1] == 0){
             console.log("Nivel de agua actualiado a 0.");
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LEVELWATER, {"status": false});
-            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "levelwater&0&"+ process.env.LEVELWATERNAMESL + "&" + process.env.LEVELWATEREMPTY);
+            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "levelwater&0&"+ process.env.LEVELWATERNAMESL + "&" + process.env.LEVELWATEREMPTY+"&true");
         }else{
         //Si es 1, significa que hay agua, por lo que se va a actualizar el estado y eliminar de la lista de la compra.
             console.log("Nivel de agua actualiado a 1.");
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LEVELWATER, {"status": true});
-            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "levelwater&0");
+            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "levelwater&0&true");
+        }
+    }
+
+    if(split[0] == 'M'){
+        //Si es 0, significa que no hay agua, por lo que se va a actualizar el estado y añadir a la lista de la compra.
+        if(split[1] == 1){
+            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN + "true");
         }
     }
 
@@ -63,14 +70,19 @@ server.on('message', (str) => {
     if(split[0] == 'P'){
         console.log("Peso del embutido actualizado.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SAUSAGE, {"status": split[1]});
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE);
+        
+        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+            if(user.data.length != 0){
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Embutido");
+            } 
+        });
 
         //Si el peso está por debajo de un mínimo, se va a añadir a la lista de la compra, si no es el caso, se va a eliminar de ella.
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minSausageWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&"+ process.env.SAUSAGESNAMESL + "&" + process.env.SAUSAGESEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&"+ process.env.SAUSAGESNAMESL + "&" + process.env.SAUSAGESEMPTY + "&true");
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&true");
             }
         });
     }

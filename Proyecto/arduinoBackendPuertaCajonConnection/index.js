@@ -54,6 +54,12 @@ server.on('message', (str) => {
             const unit = Math.ceil(split[1] / result.data.weightPerEgg);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.EGG, {"status": unit});
             
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Huevo");
+                } 
+            });
+
             if(unit < result.data.minMilkUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "egg&0&"+ process.env.EGGSNAMESL + "&" + process.env.EGGSEMPTY);
             }else{
@@ -71,6 +77,12 @@ server.on('message', (str) => {
             const unit = Math.ceil(split[1] / result.data.weightPerRefreshment);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.REFRESHMENT, {"status": unit});
 
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Refresco");
+                } 
+            });
+
             if(unit < result.data.minRefreshmentUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "refreshment&0&"+ process.env.REFRESHMENTSNAMESL + "&" + process.env.REFRESHMENTSEMPTY);
             }else{
@@ -87,6 +99,12 @@ server.on('message', (str) => {
 
             const unit = Math.ceil(split[1] / result.data.weightPerMilk);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.MILK, {"status": unit});
+
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Cartón de leche");
+                } 
+            });
 
             if(unit < result.data.minEggUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "milk&0&"+ process.env.MILKSNAMESL + "&" + process.env.MILKSEMPTY);

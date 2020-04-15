@@ -12,13 +12,13 @@ router.route('/')
 /** 
  * Descripción: Si llega un post serán reenviados al método 'createProductToShoppingList' de shoppinglistcontroller.
 */
-router.route('/:model&:product&:name&:msg')
+router.route('/:model&:product&:name&:msg&:end')
     .post(shoppingListCtrl.createProductToShoppingList)
 
 /** 
  * Descripción: Si llega un delete serán reenviados al método 'deleteProductToShoppingList'de shoppinglistcontroller.
 */
-router.route('/:model&:product')
+router.route('/:model&:product&:end')
     .delete(shoppingListCtrl.deleteProductToShoppingList)
 
 module.exports = router;

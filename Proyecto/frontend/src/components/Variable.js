@@ -4,10 +4,10 @@ import {getUrlVariables, isAdminConnected} from '../commonMethods';
 require('dotenv').config();
 require('@fortawesome/fontawesome-free/js/all');
 
-//La página de usuarios
+//La página de las variables
 export default class Variable extends Component {
     
-    //Vamos a teneruna varaible users, para guardar todos los usuarios ppara mostrarlos.
+    //Vamos a teneruna varaible varaible, para guardar todos los valores actuales para mostrarlos.
     //Ademas, tenemos la variable message por si hay que mostrar alguno y vars para obtener las varaibles de la dirección web
     state = {
         variable: []
@@ -15,7 +15,7 @@ export default class Variable extends Component {
     message = '';
     vars = getUrlVariables();
 
-    //Envia la petición para obtener todos los usuarios registrados.
+    //Envia la petición para obtener todos los datos de las variables.
     getVaraible = async () => {
         const res = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_VARIABLE);
         this.setState({variable: res.data});
@@ -30,11 +30,12 @@ export default class Variable extends Component {
         return null;
     }
 
-    //Cuando el componente esté montado, se llamará al método getUsers() para obtener los datos de los usuarios y mostrarlos
+    //Cuando el componente esté montado, se llamará al método getVaraible() para obtener los datos y mostrarlos.
     async componentDidMount(){
         this.getVaraible();
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyProduct(delta) {
         const valor = parseInt(document.form.minproduct.value);
         delta = parseInt(delta);
@@ -46,6 +47,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyEgg(delta) {
         const valor = parseInt(document.form.minegg.value);
         delta = parseInt(delta);
@@ -57,6 +59,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyRefreshment(delta) {
         const valor = parseInt(document.form.minrefreshment.value);
         delta = parseInt(delta);
@@ -68,6 +71,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyMilk(delta) {
         const valor = parseInt(document.form.minmilk.value);
         delta = parseInt(delta);
@@ -79,6 +83,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyVegetable(delta) {
         const valor = parseInt(document.form.minvegetable.value);
         delta = parseInt(delta);
@@ -90,6 +95,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyFruit(delta) {
         const valor = parseInt(document.form.minfruit.value);
         delta = parseInt(delta);
@@ -101,6 +107,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifySausage(delta) {
         const valor = parseInt(document.form.minsausage.value);
         delta = parseInt(delta);
@@ -112,6 +119,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyMilkPerUnit(delta) {
         const valor = parseInt(document.form.milkperunit.value);
         delta = parseInt(delta);
@@ -123,6 +131,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyRefreshmentPerUnit(delta) {
         const valor = parseInt(document.form.refreshmentperunit.value);
         delta = parseInt(delta);
@@ -134,6 +143,7 @@ export default class Variable extends Component {
         }
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
     modifyEggPerUnit(delta) {
         const valor = parseInt(document.form.eggperunit.value);
         delta = parseInt(delta);

@@ -30,6 +30,7 @@ char writeBuffer[34]; //Para guardar el mensaje que llega
 byte writeBufferRFID[16]; //Para guardar el mensaje que se envia a la tarjeta
 int packetSize;
 int timeInsideLoop;
+unsigned long previousMillis = 0;
 
 WiFiUDP Udp;
 MFRC522 rfid(ssPin, resetPin);
@@ -72,14 +73,15 @@ void setup() {
 
   Udp.begin(localPort);
   //Conexión con el wifi terminada
-
-  //Iniciamos RFID
-  rfid.PCD_Init();   
+  
 }
 
 void loop() {
 
-  if((millis() - previousMillis) > 10000){
+  //Iniciamos RFID
+  rfid.PCD_Init(); 
+
+  if((millis() - previousMillis) > 28800000){
     Udp.beginPacket(ipSend, localPort);
     Udp.write("A");
     Udp.endPacket();
@@ -118,14 +120,19 @@ void loop() {
     do{
       packetSize = Udp.parsePacket();
       delay(1);
+      Serial.println(timeInsideLoop);
       timeInsideLoop++;
     }while(!packetSize && timeInsideLoop <= 999);
 
     //Si no llega una respuesta, se mostrará con un LED que ha habido un error, puesto que siempre tiene que enviar una respuesta.
     if(timeInsideLoop == 1000){
-      digitalWrite(usingRFIDPin , LOW);
-      digitalWrite(error , HIGH);
-      return;  
+      digitalWrite(usingRFIDPin, LOW);
+      digitalWrite(error, HIGH);
+      delay(2000);
+      digitalWrite(resetPin, HIGH);
+      digitalWrite(resetPin, LOW);
+      digitalWrite(error, LOW);
+      return; 
     }
 
     //Leemos la respuesta del backend y la guardamos en writeBuffer
@@ -166,12 +173,13 @@ void loop() {
       Udp.endPacket();
       //Mostramos por un LED que la escritura ha sido satisfactoria.
       digitalWrite(userOrProductRegistred , HIGH);
-      delay(1000);
+      delay(2000);
       digitalWrite(userOrProductRegistred , LOW);
     }
 
     digitalWrite(usingRFIDPin , LOW);
-
+    delay(5000);
+    
   }else{
     //Mostramos con un LED que está siendo usada la tarjeta. Si la tarjeta, el primer caracter es una 'P', significa que es un producto, por lo que estamos sacando un producto de la nevera (modo 2)
     digitalWrite(usingRFIDPin , HIGH);
@@ -201,7 +209,7 @@ void loop() {
 
       //Se muentra con un LED que el proceso de sacar un producto de la nevera ha terminado.
       digitalWrite(productDeleted , HIGH);
-      delay(1000);
+      delay(2000);
       digitalWrite(productDeleted , LOW);
 
     //Si la tarjeta, el primer caracter es una 'U', significa que es un usuario, por lo que estamos iniciando sesion o eliminando un usuario de la tarjeta (modo 3)
@@ -226,15 +234,21 @@ void loop() {
       timeInsideLoop = 0;
       do{
         packetSize = Udp.parsePacket();
+        delay(1);
+        Serial.println(timeInsideLoop);
         timeInsideLoop++;
-      }while(!packetSize || timeInsideLoop <= 999);
+      }while(!packetSize && timeInsideLoop <= 999);
 
       //Si no llega una respuesta, se mostrará con un LED que ha habido un error, puesto que siempre tiene que enviar una respuesta.
-      if(timeInsideLoop == 1000){
-        digitalWrite(usingRFIDPin , LOW);
-        digitalWrite(error , HIGH);
-        return;  
-      }
+       if(timeInsideLoop == 1000){
+        digitalWrite(usingRFIDPin, LOW);
+        digitalWrite(error, HIGH);
+        delay(2000);
+        digitalWrite(resetPin, HIGH);
+        digitalWrite(resetPin, LOW);
+        digitalWrite(error, LOW);
+        return; 
+       }
 
       //Escribimos la respuesta que nos ha llegado en 'writeBuffer'
       Udp.read(writeBuffer, 255);
@@ -248,12 +262,12 @@ void loop() {
         rfid.MIFARE_Write(block, empty, 16);   
 
         digitalWrite(userDeleted , HIGH);
-        delay(1000);
+        delay(2000);
         digitalWrite(userDeleted , LOW);
       }else{
         //Si nos dan otra respuesta, significa que esta iniciando sesión y no tenemos que eliminar nada, por lo que mostramos por un LED el correcto inicio de sesión del usuario.
         digitalWrite(userLogin , HIGH);
-        delay(1000);
+        delay(2000);
         digitalWrite(userLogin , LOW);
       }
       
@@ -266,6 +280,7 @@ void loop() {
       rfid.MIFARE_Write(block, empty, 16);   
     }
     digitalWrite(usingRFIDPin , LOW);
+    delay(5000);
   }
   rfid.PICC_HaltA();
   rfid.PCD_StopCrypto1();

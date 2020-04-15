@@ -50,6 +50,12 @@ server.on('message', (str) => {
         console.log("Cajon de frutas izquierdo actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.FRUITLEFT, {"status": split[1]});
 
+        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+            if(user.data.length != 0){
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Fruta del cajón izquierdo");
+            } 
+        });
+
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minFruitWeight){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitleft&0&"+ process.env.FRUITLEFTNAMESL + "&" + process.env.FRUITLEFTEMPTY);
@@ -62,6 +68,12 @@ server.on('message', (str) => {
     if(split[0] == 'PD'){
         console.log("Cajon de frutas derecho actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.FRUITRIGHT, {"status": split[1]});
+
+        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+            if(user.data.length != 0){
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Fruta del cajón derecho");
+            } 
+        });
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minFruitWeight){

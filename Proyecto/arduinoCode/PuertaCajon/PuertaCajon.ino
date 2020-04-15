@@ -37,6 +37,7 @@ float factorDeCalibracion3 = -24000;
 float factorDeCalibracion4 = -24000;
 float factorDeCalibracion5 = -24000;
 float factorDeCalibracion6 = -24000;
+unsigned long previousMillis = 0;
 
 void setup() {
   
@@ -114,7 +115,7 @@ void setup() {
 
 void loop() {
 
-  if((millis() - previousMillis) > 10000){
+  if((millis() - previousMillis) > 28800000){
     Udp.beginPacket(ipSend, localPort);
     Udp.write("A");
     Udp.endPacket();

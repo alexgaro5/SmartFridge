@@ -25,6 +25,7 @@ HX711 peso1, peso2;
 float pesoKg1, anteriorPesoKg1, pesoKg2, anteriorPesoKg2;
 float factorDeCalibracion1 = -24000;
 float factorDeCalibracion2 = -24000;
+unsigned long previousMillis = 0;
 
 void setup() {
   
@@ -78,7 +79,7 @@ void setup() {
 
 void loop() {
 
-  if((millis() - previousMillis) > 10000){
+  if((millis() - previousMillis) > 28800000){
     Udp.beginPacket(ipSend, localPort);
     Udp.write("A");
     Udp.endPacket();

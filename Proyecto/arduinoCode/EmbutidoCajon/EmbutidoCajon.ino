@@ -13,6 +13,8 @@ const int datosPesoPin1 = 3;
 const int sensorNivel = 4;
 const int relojPesoPin2 = 5;
 const int datosPesoPin2 = 6;
+const int datosSensorPuerta1 = 7;
+const int datosSensorPuerta2 = 8;
 
 char ipSend[] = "192.168.1.225"; //Raspberry IP
 IPAddress ipReceive(192, 168, 1, 228); //Arduino IP
@@ -29,6 +31,7 @@ float pesoKg1, anteriorPesoKg1, pesoKg2, anteriorPesoKg2;
 float factorDeCalibracion1 = -24000;
 float factorDeCalibracion2 = -24000;
 int nivelAnt, nivel;
+int sensorPuerta1, sensorPuerta1Ant, sensorPuerta2, sensorPuerta2Ant;
 char writeBuffer[34];
 unsigned long previousMillis = 0;
 
@@ -72,6 +75,8 @@ void setup() {
 
   //Inicializamos el sensor de nivel
   pinMode(sensorNivel, INPUT);
+  pinMode(datosSensorPuerta1, INPUT_PULLUP);
+  pinMode(datosSensorPuerta2, INPUT_PULLUP);
   
   peso1.set_scale();
   peso1.tare();
@@ -84,12 +89,14 @@ void setup() {
   anteriorPesoKg1 = 0;
   anteriorPesoKg2 = 0;
   nivelAnt = 0;
+  sensorPuerta1Ant = 0;
+  sensorPuerta2Ant = 0;
 }
 
 void loop() {
 
 
-  if((millis() - previousMillis) > 10000){
+  if((millis() - previousMillis) > 28800000){
     Udp.beginPacket(ipSend, localPort);
     Udp.write("A");
     Udp.endPacket();
@@ -100,7 +107,9 @@ void loop() {
   pesoKg1 = peso1.get_units();
   pesoKg2 = peso2.get_units();
   nivel = digitalRead(sensorNivel);
-
+  sensorPuerta1 = digitalRead(datosSensorPuerta1);
+  sensorPuerta2 = digitalRead(datosSensorPuerta2);
+  
   //Si el peso o los niveles son diferentes a los de la ultima ejecución, enviamos un paquete con el peso/nivel actualizado para guardarlo en el backend.
   //Para enviar un paquete actualizando el peso de uno de los sensores, tiene que haber una diferencia de peso de 30g entre el peso anterior y el actual.
   if(nivel != nivelAnt){
@@ -108,6 +117,22 @@ void loop() {
     Udp.beginPacket(ipSend, localPort);
     Udp.write("N:");
     Udp.write(String(nivel).c_str());
+    Udp.endPacket();
+  }
+
+  if(sensorPuerta1 != sensorPuerta1Ant){
+    sensorPuerta1Ant = sensorPuerta1;
+    Udp.beginPacket(ipSend, localPort);
+    Udp.write("M:");
+    Udp.write(String(sensorPuerta1).c_str());
+    Udp.endPacket();
+  }
+
+  if(sensorPuerta2 != sensorPuerta2Ant){
+    sensorPuerta2Ant = sensorPuerta2;
+    Udp.beginPacket(ipSend, localPort);
+    Udp.write("M:");
+    Udp.write(String(sensorPuerta1).c_str());
     Udp.endPacket();
   }
   

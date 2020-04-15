@@ -52,6 +52,12 @@ server.on('message', (str) => {
         
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
 
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Verdura del cajón izquierdo");
+                } 
+            });
+
             if(split[1] < result.data.minVegetableWeight){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0&"+ process.env.VEGETABLELEFTNAMESL + "&" + process.env.VEGETABLELEFTEMPTY);
             }else{
@@ -66,6 +72,12 @@ server.on('message', (str) => {
         
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Verdura del cajón derecho");
+                } 
+            });
+
             if(split[1] < result.data.minVegetableWeight){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0&"+ process.env.VEGETABLERIGHTNAMESL + "&" + process.env.VEGETABLERIGHTEMPTY);
             }else{
