@@ -78,7 +78,7 @@ server.on('message', (str) => {
                         if(nextAmount == 0){
                             axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LABEL + label.data[0]._id);
                         }else{
-                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LABEL + label.data[0]._id, {amount: nextAmount, end: 'true'});
+                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LABEL + label.data[0]._id, {amount: nextAmount, end: "true"});
                         }
         
                     }else{
@@ -117,7 +117,7 @@ server.on('message', (str) => {
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid).then(function(product) {
                     //Si el producto existe, anumentamos la cantidad en la nevera a mas 1, si no, mostraremos error por consola.
                     if(product.data != null){
-                        axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount + 1, end: 'true'});
+                        axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount + 1, end: "true"});
                     }else{
                         console.log(process.env.DOESNT_EXIST_PRODUCT);
                     } 
@@ -138,7 +138,7 @@ server.on('message', (str) => {
                         if(product.data.amount <= 0){
                             console.log(process.env.ERR_AMOUNT);
                         }else{
-                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount - 1, end: 'true'});
+                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount - 1, end: "true"});
                             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                                 if(user.data.length != 0){
                                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&" + product.data.name);

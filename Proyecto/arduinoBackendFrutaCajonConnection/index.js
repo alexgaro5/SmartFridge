@@ -57,11 +57,7 @@ server.on('message', (str) => {
         });
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-            if(split[1] < result.data.minFruitWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitleft&0&"+ process.env.FRUITLEFTNAMESL + "&" + process.env.FRUITLEFTEMPTY);
-            }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitleft&0");
-            }
+         
         });
     }
 
@@ -77,9 +73,9 @@ server.on('message', (str) => {
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minFruitWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitright&0&"+ process.env.FRUITRIGHTNAMESL + "&" + process.env.FRUITRIGHTEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "fruitright", idProduct: "0", name: process.env.FRUITRIGHTNAMESL, msg: process.env.FRUITRIGHTEMPTY, imageUrl: process.env.FRUIT_IMG_URL, end: "true"});
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitright&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitright&0&true");
             }
         });
     }

@@ -61,9 +61,9 @@ server.on('message', (str) => {
             });
 
             if(unit < result.data.minMilkUnit){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "egg&0&"+ process.env.EGGSNAMESL + "&" + process.env.EGGSEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "egg", idProduct: "0", name: process.env.EGGSNAMESL, msg: process.env.EGGSEMPTY, imageUrl: process.env.EGG_IMG_URL, end: "true"});
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "egg&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "egg&0&true");
             }
 
         });
@@ -84,9 +84,9 @@ server.on('message', (str) => {
             });
 
             if(unit < result.data.minRefreshmentUnit){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "refreshment&0&"+ process.env.REFRESHMENTSNAMESL + "&" + process.env.REFRESHMENTSEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "refreshment", idProduct: "0", name: process.env.REFRESHMENTSNAMESL, msg: process.env.REFRESHMENTSEMPTY, imageUrl: process.env.REFRESHMENT_IMG_URL, end: "true"});
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "refreshment&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "refreshment&0&true");
             }
 
         });
@@ -107,7 +107,7 @@ server.on('message', (str) => {
             });
 
             if(unit < result.data.minEggUnit){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "milk&0&"+ process.env.MILKSNAMESL + "&" + process.env.MILKSEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "milk", idProduct: "0", name: process.env.MILKSNAMESL, msg: process.env.MILKSEMPTY, imageUrl: process.env.MILK_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "milk&0");
             }

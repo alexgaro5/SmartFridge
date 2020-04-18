@@ -12,7 +12,8 @@ export default class EditLabel extends Component {
     //Creamos las variables label (para guardar la etiqueta a modificar), message (por si hay que mostrar alguno)
     //vars (para recoger la ID de la etiqueta a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al)
     state = {
-        label: []
+        label: [],
+        name: ''
     }
     message = '';
     vars = getUrlVariables();
@@ -22,6 +23,19 @@ export default class EditLabel extends Component {
     getLabel = async () => {
         const res = await axios.get(this.update);
         this.setState({label: res.data});
+
+        const product = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + this.state.label.idProduct);
+        this.setState({name: product.data.name});
+    }
+
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
+    modifyAmount(delta) {
+        const valor = parseInt(document.form.amount.value);
+        delta = parseInt(delta);
+
+        if(valor !== 0 || delta !== -1){
+            document.form.amount.value = parseInt(valor)+parseInt(delta);
+        }
     }
 
     //Si hay algún mensaje que mostrar (si viene alguno en la dirección web), se devolverá este mensaje para mostrarlo.
@@ -53,16 +67,21 @@ export default class EditLabel extends Component {
                                 
                                 { this.Anuncio() }
 
-                                <form action={this.update} method="post">
-                                    <input type="hidden" name="end" value="false"/>
+                                <form action={this.update} method="post" name="form">
+                                    <input type="hidden" name="end" value='false'/>
                                     <div className="form-group">
                                         <label htmlFor="name">Nombre:</label>
-                                        <input type="text" name="nameProduct" defaultValue={this.state.label.nameProduct} readOnly="readonly" className="form-control" required/>
+                                        <input type="text" name="nameProduct" defaultValue={this.state.name} readOnly="readonly" className="form-control" required/>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="email">Cantidad:</label>
+                                        <label htmlFor="amount">Cantidad:</label>
                                         <input type="number" name="amount" defaultValue={this.state.label.amount} min='0' max='100' className="form-control" required/>
                                     </div>
+                                    <div className="text-center">
+                                        <input style={{marginTop: 5, marginRight: 40}} type="button" className="btn btn-xs btn-primary" value="-" onClick={() => this.modifyAmount(-1)}></input> 
+                                        <input style={{marginTop: 5}} type="button" className="btn btn-xs btn-primary" value="+" onClick={() => this.modifyAmount(+1)}></input>
+                                    </div>
+                                    <br/>
                                     <div className='text-center'>
                                         <input type="submit" value="Editar" className="btn btn-primary btn-lg" />
                                     </div>

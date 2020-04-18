@@ -30,6 +30,10 @@ server.on('error', (err) => {
 //Si la conexión se crea con éxito, nos lo notificará por consola.
 server.on('listening', () => {
     console.log('Connection is opened');
+    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableright", idProduct: "0", name: process.env.VEGETABLERIGHTNAMESL, msg: process.env.VEGETABLERIGHTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
+    axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0&true");
+    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableleft", idProduct: "0", name: process.env.VEGETABLELEFTNAMESL, msg: process.env.VEGETABLELEFTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
+    axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0&true");
 });
 
 //Si llega un paquete de la Arduino...
@@ -59,9 +63,9 @@ server.on('message', (str) => {
             });
 
             if(split[1] < result.data.minVegetableWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0&"+ process.env.VEGETABLELEFTNAMESL + "&" + process.env.VEGETABLELEFTEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableleft", idProduct: "0", name: process.env.VEGETABLELEFTNAMESL, msg: process.env.VEGETABLELEFTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0&true");
             }
         });
     }
@@ -79,9 +83,9 @@ server.on('message', (str) => {
             });
 
             if(split[1] < result.data.minVegetableWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0&"+ process.env.VEGETABLERIGHTNAMESL + "&" + process.env.VEGETABLERIGHTEMPTY);
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableright", idProduct: "0", name: process.env.VEGETABLERIGHTNAMESL, msg: process.env.VEGETABLERIGHTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
             }else{
-                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0");
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0&true");
             }
         });
     }

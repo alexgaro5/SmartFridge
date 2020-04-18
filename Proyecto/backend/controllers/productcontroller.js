@@ -47,7 +47,13 @@ productCtrl.getProductByName = async (req, res) => {
  * Devolución del método: Nada.
 */
 productCtrl.createProduct = async (req, res) => {
-    var {name, amount} = req.body;
+    var {name, amount, category, url} = req.body;
+
+    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+    if(url == ""){
+        url = "https://i.ibb.co/z56MmNq/Logo-UAL-Transparente.png";
+    }
 
     //Buscamos si existe el producto.
     const pr =  await productCtrl.getProductByName(name);
@@ -57,7 +63,9 @@ productCtrl.createProduct = async (req, res) => {
         const newProduct = new Product({
             id: await productCtrl.getAId(),
             name: name,
-            amount: amount
+            amount: amount,
+            category: category,
+            imageUrl: url
         });
         await newProduct.save();
         
@@ -73,40 +81,28 @@ productCtrl.createProduct = async (req, res) => {
  * Devolución del método: Nada.
 */
 productCtrl.updateProduct = async (req, res) => { 
-    var {name, amount, end} = req.body;
+    var {name, amount, category, url, end} = req.body;
 
     if(req.params.id.length == 4){
         var pr = await Product.findOne({id: req.params.id});
     }else{
         var pr = await Product.findOne({_id: req.params.id});
     }
-
+    
     //Si se va a actualizar el nombre, guardamos el anterior, buscamos las etiquetas y la lista de la compra
     //que tienen ese nombre anterior, y las actualizamos con el nombre nuevo. 
     if(name != null){
-        name = name.toUpperCase();
-        const {getLabelByName} = require('./labelcontroller');
-        const {getShoppingListByName} = require('./shoppinglistcontroller');
-
-        const oldName = pr.name;
-        
-        var label = await getLabelByName(oldName);
-        var sl = await getShoppingListByName(oldName);
-
-        if(label != null && label.lenght != 0){
-            label.nameProduct = name;
-            await label.save();
-        }
-        if(sl != null && sl.length != 0){
-            sl.name = name;
-            await sl.save();
-        }
-
+        name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
         pr.name = name;
+    }
+
+    if(url != "" && end == "false"){
+        pr.imageUrl = url;
     }
 
     //Actualizamos el producto.
     pr.amount = amount;
+    if(end == "false") pr.category = category;
     await pr.save();
 
     //Si se ha actualizado la cantidad y esta por debajo del mínimo, se añade a la lista de la compra. Si está por encima, se elimina si existe.
@@ -116,14 +112,14 @@ productCtrl.updateProduct = async (req, res) => {
     getMinProductUnit().then(function(minamount){
         
         if(amount <= minamount){
-            createProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), name: pr.name, msg: "El producto '"+pr.name+"' se está agotando en el frigorífico.", end: 'false'}});
+            createProductToShoppingList({body: {id: 'product', idProduct: pr.id.toString(), msg: "El producto '"+pr.name+"' se está agotando en el frigorífico.", end: 'false'}});
         }else{
             deleteProductToShoppingList({params: {id: 'product', idProduct: pr.id.toString(), end: 'false'}});
         }
     });
 
     //Si end = true, se envia un end, si no, se reenvia a una dirección.
-    if(end == 'true'){
+    if(end == "true"){
         res.end();
     }else{
         res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/editproduct?msg=success&product='+req.params.id);
@@ -136,12 +132,12 @@ productCtrl.updateProduct = async (req, res) => {
  * Devolución del método: Nada.
 */
 productCtrl.deleteProduct = async (req, res) => {
-    const {deleteLabelByName} = require('./labelcontroller');
+    const {deleteLabelByIdProduct} = require('./labelcontroller');
     const {deleteProductToShoppingList} = require('./shoppinglistcontroller');
 
     //Si vamos a eliminar un producto, tenemos que eliminar todas las etiquetas asociadas a ese producto.
     const pr = await Product.findOne({_id: req.params.id});
-    deleteLabelByName(pr.name);
+    deleteLabelByIdProduct(pr.id);
     
     //Si vamos a eliminar un producto, tenemos que eliminar ese producto de la lista de la compra.
     deleteProductToShoppingList({params: {id: 'product', idProduct: req.params.id, end: 'false'}});

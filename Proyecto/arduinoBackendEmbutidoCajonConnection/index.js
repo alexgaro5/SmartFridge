@@ -50,7 +50,7 @@ server.on('message', (str) => {
         if(split[1] == 0){
             console.log("Nivel de agua actualiado a 0.");
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LEVELWATER, {"status": false});
-            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "levelwater&0&"+ process.env.LEVELWATERNAMESL + "&" + process.env.LEVELWATEREMPTY+"&true");
+            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "levelwater", idProduct: "0", name: process.env.LEVELWATERNAMESL, msg: process.env.LEVELWATEREMPTY, imageUrl: process.env.LEVERWATER_IMG_URL, end: "true"});
         }else{
         //Si es 1, significa que hay agua, por lo que se va a actualizar el estado y eliminar de la lista de la compra.
             console.log("Nivel de agua actualiado a 1.");
@@ -62,7 +62,7 @@ server.on('message', (str) => {
     if(split[0] == 'M'){
         //Si es 0, significa que no hay agua, por lo que se va a actualizar el estado y añadir a la lista de la compra.
         if(split[1] == 1){
-            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN + "true");
+            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN, {end: "true"});
         }
     }
 
@@ -80,7 +80,7 @@ server.on('message', (str) => {
         //Si el peso está por debajo de un mínimo, se va a añadir a la lista de la compra, si no es el caso, se va a eliminar de ella.
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minSausageWeight){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&"+ process.env.SAUSAGESNAMESL + "&" + process.env.SAUSAGESEMPTY + "&true");
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "sausage", idProduct: "0", name: process.env.SAUSAGESNAMESL, msg: process.env.SAUSAGESEMPTY, imageUrl: process.env.SAUSAGE_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&true");
             }

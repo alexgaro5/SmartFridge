@@ -6,7 +6,9 @@ const { Schema, model } = require('mongoose');
 const productSchema = new Schema({
     id: Number,
     name: String,
-    amount: Number
+    amount: Number,
+    category: String,
+    imageUrl: String
 });
 
 module.exports = model('Product', productSchema);

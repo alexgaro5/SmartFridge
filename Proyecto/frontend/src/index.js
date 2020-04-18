@@ -9,7 +9,6 @@ import {isSomeoneConnected} from './commonMethods';
 
 //Importamos los diferentes archivos con las diferentes páginas.
 import Navigation from './components/Navigation';
-import Main from './components/Main';
 import User from './components/User';
 import Forget from './components/Forget';
 import Recover from './components/Recover';
@@ -21,6 +20,9 @@ import EditLabel from './components/EditLabel';
 import Login from './components/Login';
 import Database from './components/Database';
 import Variable from './components/Variable';
+import ShoppingList from './components/ShoppingList';
+import Activity from './components/Activity';
+import Diet from './components/Diet';
 
 
 const someone = isSomeoneConnected();
@@ -28,7 +30,7 @@ var messageMainLogin = '';
 
 //Comprobamos si hay alguien conectado. Si lo hay, guardamos como página de bienvenida la página "Main", si no lo hay, la  página de "Login"
 if(someone){
-  messageMainLogin = <Route path="/" exact component={Main}/>
+  messageMainLogin = <Route path="/" exact component={Products}/>
 }else{
   messageMainLogin = <Route path="/" exact component={Login}/>
 }
@@ -51,6 +53,9 @@ function App() {
         <Route path="/edituser" exact component={EditUser}/>
         <Route path="/database" exact component={Database}/>
         <Route path="/variable" exact component={Variable}/>
+        <Route path="/shoppinglist" exact component={ShoppingList}/>
+        <Route path="/activity" exact component={Activity}/>
+        <Route path="/diet" exact component={Diet}/>
       </div>
     </Router>
   );

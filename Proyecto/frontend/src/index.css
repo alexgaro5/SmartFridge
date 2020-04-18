@@ -19,3 +19,27 @@ input[type=number]::-webkit-outer-spin-button {
     appearance: none;
     margin: 0; 
 }
+
+.nopointul{
+    list-style: none;
+    padding: 0;
+}
+
+.maxwidth{
+    max-width: 150px;
+}
+
+.border-md-right {
+    border-right: 1px solid silver;
+  }
+  
+  @media (max-width: 990px) {
+  
+    .border-md-right {
+      border-right: none;
+    }  
+}
+
+.test{
+    border: none;
+}

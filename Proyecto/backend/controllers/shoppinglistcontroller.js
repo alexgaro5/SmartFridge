@@ -60,18 +60,13 @@ shoppingListCtrl.getShoppingList = async (req, res) => {
     res.json(sl);
 }
 
-shoppingListCtrl.getShoppingListByName = async (req, res) => {
-    const sl = await ShoppingList.findOne({name: req});
-    return sl;
-}
-
 /** 
  * Descripción: Crea un nuevo registro en la lista de la compra.
  * Parámetros de entrada: id, idProduct, name, msg, end.
  * Devolución del método: Nada.
 */
 shoppingListCtrl.createProductToShoppingList = async (req, res) => {
-    const {id, idProduct, name, msg, end} = req.params;
+    const {id, idProduct, name, imageUrl, msg, end} = req.body;
     
     const isAnnunciated = await ShoppingList.find({id: id, idProduct: idProduct});
 
@@ -81,7 +76,7 @@ shoppingListCtrl.createProductToShoppingList = async (req, res) => {
             id: id,
             idProduct: idProduct,
             name: name,
-            msg: msg
+            imageUrl, imageUrl
         });
         await newProductToShoppingList.save();
         sendEmail({msg}); 

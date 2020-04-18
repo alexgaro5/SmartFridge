@@ -21,18 +21,8 @@ labelCtrl.getLabels = async (req, res) => {
  * Devolución del método: Una etiqueta.
 */
 labelCtrl.getLabelByID = async (req, res) => { 
-    const lb = await Label.findOne({_id: req.params.id});
+    var lb = await Label.findOne({_id: req.params.id});
     res.json(lb);
-}
-
-/** 
- * Descripción: Devuelve las etiqueta registrada con el nombre que pasamos por parámetro.
- * Parámetros de entrada: nameProduct.
- * Devolución del método: Una etiqueta.
-*/
-labelCtrl.getLabelByName = async (req, res) => { 
-    const lb = await Label.findOne({nameProduct: req});
-    return lb;
 }
 
 /** 
@@ -41,18 +31,15 @@ labelCtrl.getLabelByName = async (req, res) => {
  * Devolución del método: Nada.
 */
 labelCtrl.createLabel = async (req, res) => {
-    const {nameProduct, amount} = req.body;
+    const {id, amount} = req.body;
 
-    const lb = await Label.findOne({nameProduct: nameProduct});
+    const lb = await Label.findOne({idProduct: id});
 
     //Si no hay una etiqueta con este nombre, se crea añadiendo la ID del producto buscándola por el nombre.
     if(lb == null){
-        const {getProductByName} = require('./productcontroller');
-        const pr = await getProductByName(nameProduct);
-        
+
         const newLabel = new Label({
-            idProduct: pr.id,
-            nameProduct: nameProduct,
+            idProduct: id,
             amount: amount
         });
         await newLabel.save();
@@ -75,7 +62,7 @@ labelCtrl.updateLabel = async (req, res) => {
         amount
     });
 
-    if(end == 'true'){
+    if(end == "true"){
         res.end();
     }else{
         res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/editlabel?msg=success&label='+req.params.id);
@@ -93,12 +80,12 @@ labelCtrl.deleteLabel = async (req, res) => {
 }
 
 /** 
- * Descripción: Elimina la etiqueta que coincida con el nombre pasado por parámetro.
+ * Descripción: Elimina la etiqueta que coincida con el id del producto pasado por parámetro.
  * Parámetros de entrada: nameProduct.
  * Devolución del método: Nada.
 */
-labelCtrl.deleteLabelByName = async (req, res) => { 
-    await Label.findOneAndDelete({nameProduct: req}); 
+labelCtrl.deleteLabelByIdProduct = async (req, res) => { 
+    await Label.findOneAndDelete({idProduct: req}); 
 }
 
 module.exports = labelCtrl;

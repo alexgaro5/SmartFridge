@@ -72,50 +72,62 @@ export default class User extends Component {
         //Si el usuario admin esta logueado se mostrará la página, si no, no.
         if(isAdminConnected()){
             return (
-                <div className="row">
-                    <div className="col-md-4">
-                        <div className="card">
-                            <div className="card-header text-center">
-                                <h4><span className="fa fa-user-plus"></span> Añadir nuevo usuario</h4>
-                            </div>
-                            <div className="card-body">
-                                
-                                { this.Anuncio() }
+                <div id="accordion">
+                    <div className="row">
+                        <div className="col-md-12">
 
-                                <form action={process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER} method="post">
-                                    <div className="form-group">
-                                        <label htmlFor="email">Email:</label>
-                                        <input type="email" name="email" className="form-control" required/>
+                            { this.Anuncio() }
+
+                            <div className="card">
+                                <button className="btn" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <h4 id="headingOne" className="mb-0">
+                                        <span className="fas fa-plus-square"></span> Añadir nuevo usuario
+                                    </h4>
+                                    <span className="fas fa-chevron-circle-down"></span>
+                                </button>
+
+                                <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+                                    
+                                    <div className="card-body">
+
+                                    <form action={process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER} method="post">
+                                        <div className="form-group">
+                                            <label htmlFor="email">Email:</label>
+                                            <input type="email" name="email" className="form-control" required/>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="email">Nombre de usuario:</label>
+                                            <input type="text" pattern="[a-zA-Z0-9]+" title="Solo de admiten letras y números." maxLength="15" name="username" className="form-control" required/>
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="password">Contraseña:</label>
+                                            <input type="password" name="password" className="form-control" required/>
+                                        </div>
+                                        <div className='text-center'>
+                                            <input type="submit" value="Añadir" className="btn btn-primary btn-lg" />
+                                        </div>
+                                    </form>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="email">Nombre de usuario:</label>
-                                        <input type="text" pattern="[a-zA-Z0-9]+" title="Solo de admiten letras y números." maxLength="15" name="username" className="form-control" required/>
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="password">Contraseña:</label>
-                                        <input type="password" name="password" className="form-control" required/>
-                                    </div>
-                                    <div className='text-center'>
-                                        <input type="submit" value="Añadir" className="btn btn-primary btn-lg" />
-                                    </div>
-                                </form>
+                                </div>
+                            </div>
+                            <div style={{marginTop: 15}} className="card">
+                                <div className="card-body">
+                                <h2>Usuarios existentes: <button className="float-right btn btn-danger btn-sm" onClick={() => this.deleteCard()}><span className="far fa-credit-card"></span> Eliminar tarjeta</button></h2>
+                                    <ul className="list-group">
+                                        {
+                                            this.state.users.map(user => (
+                                                <li className="list-group-item" key={user._id}>
+                                                    <span className="my-auto"><strong>Nombre de usuario:</strong> {user.username}{user.card ? <span style={{marginLeft: 5}} className='far fa-credit-card'></span> : ""}</span>
+                                                    <button className="float-right btn btn-danger btn-sm" onClick={() => this.deleteUser(user._id , user.username)}><span className="fa fa-user-minus"></span></button>
+                                                    <button className="float-right btn btn-primary btn-sm" style={{marginRight: 5}} onClick={() => this.editUser(user._id, user.username)}><span className="fa fa-user-edit"></span></button>
+                                                    <button className="float-right btn btn-success btn-sm" style={{marginRight: 30}} onClick={() => this.addCard(user.username)}><span className="far fa-credit-card"></span></button>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-8">
-                        <h2>Usuarios existentes: <button className="float-right btn btn-danger btn-sm" onClick={() => this.deleteCard()}><span className="far fa-credit-card"></span> Eliminar tarjeta</button></h2>
-                        <ul className="list-group">
-                            {
-                                this.state.users.map(user => (
-                                    <li className="list-group-item" key={user._id}>
-                                        <span className="my-auto"><strong>Nombre de usuario:</strong> {user.username}{user.card ? <span style={{marginLeft: 5}} className='far fa-credit-card'></span> : ""}</span>
-                                        <button className="float-right btn btn-danger btn-sm" onClick={() => this.deleteUser(user._id , user.username)}><span className="fa fa-user-minus"></span></button>
-                                        <button className="float-right btn btn-primary btn-sm" style={{marginRight: 5}} onClick={() => this.editUser(user._id, user.username)}><span className="fa fa-user-edit"></span></button>
-                                        <button className="float-right btn btn-success btn-sm" style={{marginRight: 30}} onClick={() => this.addCard(user.username)}><span className="far fa-credit-card"></span></button>
-                                    </li>
-                                ))
-                            }
-                        </ul>
                     </div>
                 </div>
             )

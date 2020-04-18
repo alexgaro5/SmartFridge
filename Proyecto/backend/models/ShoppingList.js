@@ -7,7 +7,7 @@ const shoppingListSchema = new Schema({
     id: String,
     idProduct: String,
     name: String,
-    msg: String,
+    imageUrl: String,
     date:{
         type: Date,
         default: Date.now

@@ -23,6 +23,16 @@ export default class EditProduct extends Component {
         this.setState({product: res.data});
     }
 
+    //Es un método que sirve para cambiar el valor del input de la variable con ayuda de botones.
+    modifyAmount(delta) {
+        const valor = parseInt(document.form.amount.value);
+        delta = parseInt(delta);
+
+        if(valor !== 0 || delta !== -1){
+            document.form.amount.value = parseInt(valor)+parseInt(delta);
+        }
+    }
+
     //Si hay algún mensaje que mostrar (si viene alguno en la dirección web), se devolverá este mensaje para mostrarlo.
     Anuncio(){  
         if(this.vars['msg'] != null){
@@ -52,8 +62,8 @@ export default class EditProduct extends Component {
                                 
                                 { this.Anuncio() }
 
-                                <form action={this.update} method="post">
-                                    <input type="hidden" name="end" value="false"/>
+                                <form action={this.update} method="post" name="form">
+                                    <input type="hidden" name="end" value='false'/>
                                     <div className="form-group">
                                         <label htmlFor="name">Nombre:</label>
                                         <input type="text" name="name" defaultValue={this.state.product.name} className="form-control" required/>
@@ -61,6 +71,24 @@ export default class EditProduct extends Component {
                                     <div className="form-group">
                                         <label htmlFor="email">Cantidad:</label>
                                         <input type="number" name="amount" defaultValue={this.state.product.amount} min='0' max='100' className="form-control" required/>
+                                        <div className="text-center">
+                                            <input style={{marginTop: 10, marginRight: 40}} type="button" className="btn btn-xs btn-primary" value="-" onClick={() => this.modifyAmount(-1)}></input> 
+                                            <input style={{marginTop: 10}} type="button" className="btn btn-xs btn-primary" value="+" onClick={() => this.modifyAmount(+1)}></input>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="category">Categoria:</label>
+                                        <select id="category" name="category" className="form-control" defaultValue={this.state.product.category} required>
+                                            {(this.state.product.category === "Leche y derivados") ? <option value="Leche y derivados" selected>Leche y derivados</option> : <option value="Leche y derivados">Leche y derivados</option>}
+                                            {(this.state.product.category === "Carnes, pescados y huevos") ? <option value="Carnes, pescados y huevos" selected>Carnes, pescados y huevos</option> : <option value="Carnes, pescados y huevos">Carnes, pescados y huevos</option>}
+                                            {(this.state.product.category === "Patatas, legumbres, frutos secos") ? <option value="Patatas, legumbres, frutos secos" selected>Patatas, legumbres, frutos secos</option> : <option value="Patatas, legumbres, frutos secos">Patatas, legumbres, frutos secos</option>}
+                                            {(this.state.product.category === "Cereales y derivados, azúcar y dulces") ? <option value="Cereales y derivados, azúcar y dulces" selected>Cereales y derivados, azúcar y dulces</option> : <option value="Cereales y derivados, azúcar y dulces">Cereales y derivados, azúcar y dulces</option>}
+                                            {(this.state.product.category === "Grasas, aceite y mantequilla") ? <option value="Grasas, aceite y mantequilla" selected>Grasas, aceite y mantequilla</option> : <option value="Grasas, aceite y mantequilla">Grasas, aceite y mantequilla</option>}
+                                        </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="url">URL de la imagen:</label>
+                                        <input type="url" name="url" className="form-control"/>
                                     </div>
                                     <div className='text-center'>
                                         <input type="submit" value="Editar" className="btn btn-primary btn-lg" />
