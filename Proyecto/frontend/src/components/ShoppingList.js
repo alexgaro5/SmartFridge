@@ -4,10 +4,10 @@ import axios from 'axios'
 import {isSomeoneConnected} from '../commonMethods';
 require('dotenv').config();
 
-//La página principal
-export default class Main extends Component {
+//La página de la lista de la compra
+export default class ShoppingList extends Component {
     
-    //Usamos la variable sl(para guardar la lista de la compra guardada en el backend para mostrar).
+    //Usamos la variable sl(para guardar la lista de la compra) y el slToShow(Para recoger la información de cada sl y mostrarla).
     state = {
         sl: [],
         slToShow: []
@@ -35,6 +35,7 @@ export default class Main extends Component {
 
     }
 
+    //Cuando el componente esté montado, se llamará al método getShoppingList() para obtener los datos de los usuarios y mostrarlos
     async componentDidMount(){
         this.getShoppingList();
     }
@@ -52,6 +53,7 @@ export default class Main extends Component {
                             <div className="card-body">
                                 <div className="row">
                                     {
+                                        (this.state.slToShow.length === 0) ? <div className="text-center col-sm-12"><h5><em>No hay productos para comprar.</em></h5></div> :
                                         this.state.slToShow.map(product => (
                                             <div className="col-xl-2 col-md-4 col-sm-6 center-block" key={product.name}>
                                                 <ul className="nopointul text-center">

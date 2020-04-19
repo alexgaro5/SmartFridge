@@ -14,6 +14,9 @@ const server = dgram.createSocket('udp4');
 
 //Variables necesarias.
 var lastDateConnection, sendemail;
+var lastEggUnit = 100;
+var lastMilkUnit = 100;
+var lastRefreshmentUnit = 100;
 
 //Abrimos conexión con la Arduino.
 server.bind(process.env.PORT_RASPBERRY_DOOR_ARDUINO, process.env.IP_RASPBERRY);
@@ -54,11 +57,15 @@ server.on('message', (str) => {
             const unit = Math.ceil(split[1] / result.data.weightPerEgg);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.EGG, {"status": unit});
             
-            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-                if(user.data.length != 0){
-                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Huevo");
-                } 
-            });
+            if(lastEggUnit > unit){
+                lastEggUnit = unit;
+                
+                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                    if(user.data.length != 0){
+                        axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.EGGSNAMESL, imageUrl: process.env.EGG_IMG_URL});
+                    } 
+                });
+            }
 
             if(unit < result.data.minMilkUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "egg", idProduct: "0", name: process.env.EGGSNAMESL, msg: process.env.EGGSEMPTY, imageUrl: process.env.EGG_IMG_URL, end: "true"});
@@ -77,11 +84,15 @@ server.on('message', (str) => {
             const unit = Math.ceil(split[1] / result.data.weightPerRefreshment);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.REFRESHMENT, {"status": unit});
 
-            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-                if(user.data.length != 0){
-                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Refresco");
-                } 
-            });
+            if(lastRefreshmentUnit > unit){
+                lastRefreshmentUnit = unit;
+                
+                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                    if(user.data.length != 0){
+                        axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.REFRESHMENTSNAMESL, imageUrl: process.env.REFRESHMENT_IMG_URL});
+                    } 
+                });
+            }
 
             if(unit < result.data.minRefreshmentUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "refreshment", idProduct: "0", name: process.env.REFRESHMENTSNAMESL, msg: process.env.REFRESHMENTSEMPTY, imageUrl: process.env.REFRESHMENT_IMG_URL, end: "true"});
@@ -100,11 +111,15 @@ server.on('message', (str) => {
             const unit = Math.ceil(split[1] / result.data.weightPerMilk);
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.MILK, {"status": unit});
 
-            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-                if(user.data.length != 0){
-                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Cartón de leche");
-                } 
-            });
+            if(lastMilkUnit > unit){
+                lastMilkUnit = unit;
+                
+                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                    if(user.data.length != 0){
+                        axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.MILKSNAMESL, imageUrl: process.env.MILK_IMG_URL});
+                    } 
+                });
+            }
 
             if(unit < result.data.minEggUnit){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "milk", idProduct: "0", name: process.env.MILKSNAMESL, msg: process.env.MILKSEMPTY, imageUrl: process.env.MILK_IMG_URL, end: "true"});

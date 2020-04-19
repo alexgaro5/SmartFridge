@@ -5,7 +5,8 @@ const { Schema, model } = require('mongoose');
 */
 const activitySchema = new Schema({
     userId: {type: Schema.ObjectId, ref: model('User')},
-    productName: String,
+    name: String,
+    imageUrl: String,
     date:{
         type: Date,
         default: Date.now

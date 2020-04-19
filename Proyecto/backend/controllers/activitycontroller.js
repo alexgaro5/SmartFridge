@@ -17,11 +17,13 @@ activityCtrl.getActivity = async (req, res) => {
  * Devolución del método: Nada.
 */
 activityCtrl.createActivity = async (req, res) => {
-    const {userId, productName} = req.params;
+    const userId = req.params.userId;
+    const {name, imageUrl} = req.body;
    
     const newActivity = new Activity({
-        userId: userId,
-        productName: productName
+        userId: userId.toString(),
+        name: name,
+        imageUrl: imageUrl
     });
     await newActivity.save();
 
@@ -34,8 +36,11 @@ activityCtrl.createActivity = async (req, res) => {
  * Devolución del método: Nada.
 */
 activityCtrl.deleteAllActivity = async (req, res) => {
-    await Activity.deleteMany({userId: req.params.userId});
 
+    if(req.body.date == null){
+        await Activity.deleteMany({userId: req.params.userId});
+    }
+    
     if(req.params.end){
         res.end();
     }

@@ -128,12 +128,9 @@ export default class Navigation extends Component {
         }else{
             return (
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                    <div className="container">
-                        <Link className="navbar-brand " to="/">
-                            <img src="logo.png" alt="Logo" height="34" width="34"></img>  SmartFridge
-                        </Link>
-                        
-                    </div>
+                    <Link className="navbar-brand " to="/">
+                        <img src="logo.png" alt="Logo" height="34" width="34"></img>  SmartFridge
+                    </Link>
                 </nav>
             )
         }

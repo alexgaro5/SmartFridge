@@ -14,6 +14,7 @@ const server = dgram.createSocket('udp4');
 
 //Variables necesarias.
 var lastDateConnection, sendemail;
+var lastSausageWeight = 100.0;
 
 //Abrimos conexión con la Arduino.
 server.bind(process.env.PORT_RASPBERRY_SAUSAGE_ARDUINO, process.env.IP_RASPBERRY);
@@ -62,6 +63,7 @@ server.on('message', (str) => {
     if(split[0] == 'M'){
         //Si es 0, significa que no hay agua, por lo que se va a actualizar el estado y añadir a la lista de la compra.
         if(split[1] == 1){
+            console.log("Frigorífico cerrado.");
             axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN, {end: "true"});
         }
     }
@@ -71,11 +73,15 @@ server.on('message', (str) => {
         console.log("Peso del embutido actualizado.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SAUSAGE, {"status": split[1]});
         
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-            if(user.data.length != 0){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Embutido");
-            } 
-        });
+        if((lastSausageWeight - 0.30) >= split[1]){
+            lastSausageWeight = split[1];
+            
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.SAUSAGESNAMESL, imageUrl: process.env.SAUSAGE_IMG_URL});
+                } 
+            });
+        }
 
         //Si el peso está por debajo de un mínimo, se va a añadir a la lista de la compra, si no es el caso, se va a eliminar de ella.
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){

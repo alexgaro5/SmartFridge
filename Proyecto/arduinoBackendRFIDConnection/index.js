@@ -141,7 +141,7 @@ server.on('message', (str) => {
                             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount - 1, end: "true"});
                             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                                 if(user.data.length != 0){
-                                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&" + product.data.name);
+                                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: product.data.name, imageUrl: product.data.imageUrl});
                                 } 
                             });
                         } 

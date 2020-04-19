@@ -160,6 +160,7 @@ export default class Labels extends Component {
                                     <br/>
                                     <div className="row">
                                         {
+                                            (this.state.productsWithLabel.length === 0) ? <div className="text-center col-sm-12"><h5><em>No hay etiquetas registradas.</em></h5></div> :
                                             this.state.productsWithLabel.map(label => (
                                                 <div className="col-xl-2 col-md-4 col-sm-6 center-block" key={label.id}>
                                                     <ul className="nopointul text-center">

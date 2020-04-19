@@ -14,6 +14,8 @@ const server = dgram.createSocket('udp4');
 
 //Variables necesarias.
 var lastDateConnection, sendemail;
+var lastFruitLeftWeight = 100.0;
+var lastFruitRighttWeight = 100.0;
 
 //Abrimos conexión con la Arduino.
 server.bind(process.env.PORT_RASPBERRY_FRUIT_ARDUINO, process.env.IP_RASPBERRY);
@@ -50,14 +52,22 @@ server.on('message', (str) => {
         console.log("Cajon de frutas izquierdo actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.FRUITLEFT, {"status": split[1]});
 
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-            if(user.data.length != 0){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Fruta del cajón izquierdo");
-            } 
-        });
+        if((lastFruitLeftWeight - 0.30) >= split[1]){
+            lastFruitLeftWeight = split[1];
+            
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.FRUITLEFTNAMESL, imageUrl: process.env.FRUIT_IMG_URL});
+                } 
+            });
+        }
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-         
+            if(split[1] < result.data.minFruitWeight){
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "fruitleft", idProduct: "0", name: process.env.FRUITLEFTNAMESL, msg: process.env.FRUITLEFTEMPTY, imageUrl: process.env.FRUIT_IMG_URL, end: "true"});
+            }else{
+                axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitleft&0&true");
+            }
         });
     }
 
@@ -65,11 +75,15 @@ server.on('message', (str) => {
         console.log("Cajon de frutas derecho actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.FRUITRIGHT, {"status": split[1]});
 
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
-            if(user.data.length != 0){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Fruta del cajón derecho");
-            } 
-        });
+        if((lastFruitRighttWeight - 0.30) >= split[1]){
+            lastFruitRighttWeight = split[1];
+            
+            axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
+                if(user.data.length != 0){
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.FRUITRIGHTNAMESL, imageUrl: process.env.FRUIT_IMG_URL});
+                } 
+            });
+        }
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minFruitWeight){

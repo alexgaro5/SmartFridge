@@ -316,6 +316,7 @@ export default class Products extends Component {
                                     <br/>
                                     <div className="row">
                                         {
+                                            (this.state.cat3.length === 0) ? <div className="text-center col-sm-12"><h5><em>No hay productos en esta categoria.</em></h5></div> :
                                             this.state.cat3.map(product => (
                                                 <div className="col-xl-2 col-md-3 col-sm-4 center-block" key={product.id}>
                                                     <ul className="nopointul text-center">
@@ -395,6 +396,7 @@ export default class Products extends Component {
                                     <br/>
                                     <div className="row">
                                         {
+                                            (this.state.cat7.length === 0) ? <div className="text-center col-sm-12"><h5><em>No hay productos en esta categoria.</em></h5></div> :
                                             this.state.cat7.map(product => (
                                                 <div className="col-xl-2 col-md-3 col-sm-4 center-block" key={product.id}>
                                                     <ul className="nopointul text-center">

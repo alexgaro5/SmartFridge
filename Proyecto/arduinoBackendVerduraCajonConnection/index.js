@@ -14,6 +14,8 @@ const server = dgram.createSocket('udp4');
 
 //Variables necesarias.
 var lastDateConnection, sendemail;
+var lastVegetableLeftWeight = 100.0;
+var lastVegetableRighttWeight = 100.0;
 
 //Abrimos conexión con la Arduino.
 server.bind(process.env.PORT_RASPBERRY_VEGETABLE_ARDUINO, process.env.IP_RASPBERRY);
@@ -54,14 +56,17 @@ server.on('message', (str) => {
         console.log("Cajon de verduras izquierdo actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VEGETABLELEFT, {"status": split[1]});
         
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-
+        if((lastVegetableLeftWeight - 0.30) >= split[1]){
+            lastVegetableLeftWeight = split[1];
+            
             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                 if(user.data.length != 0){
-                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Verdura del cajón izquierdo");
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.VEGETABLELEFTNAMESL, imageUrl: process.env.VEGETABLE_IMG_URL});
                 } 
             });
+        }
 
+        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minVegetableWeight){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableleft", idProduct: "0", name: process.env.VEGETABLELEFTNAMESL, msg: process.env.VEGETABLELEFTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
             }else{
@@ -74,14 +79,17 @@ server.on('message', (str) => {
         console.log("Cajon de verduras derecho actualizados.");
         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VEGETABLERIGHT, {"status": split[1]});
         
-        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
+        if((lastVegetableRighttWeight - 0.30) >= split[1]){
+            lastVegetableRighttWeight = split[1];
             
             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                 if(user.data.length != 0){
-                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id + "&Verdura del cajón derecho");
+                    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.VEGETABLERIGHTNAMESL, imageUrl: process.env.VEGETABLE_IMG_URL});
                 } 
             });
+        }
 
+        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minVegetableWeight){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableright", idProduct: "0", name: process.env.VEGETABLERIGHTNAMESL, msg: process.env.VEGETABLERIGHTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
             }else{
