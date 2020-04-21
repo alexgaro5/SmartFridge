@@ -142,9 +142,11 @@ userCtrl.deleteUser = async (req, res) => {
     var usr = await userCtrl.getUserByUsername('admin');
     //Si el user a eliminar es 'admin', no se permite.
     if(usr._id != req.params.id){
-        //Si vamos a eliminar un usuario, tenemos que eliminar toda su actividad.
+        //Si vamos a eliminar un usuario, tenemos que eliminar toda su actividad y su dieta.
         const {deleteAllActivity} = require('./activitycontroller');
+        const {deleteDietProductByUser} = require('./dietcontroller');
         await deleteAllActivity({params: {userId: req.params.id, end: false}});
+        await deleteDietProductByUser({params: {userId: req.params.id}});
 
         await User.findOneAndDelete({_id: req.params.id})
         res.end();

@@ -36,5 +36,8 @@ app.use(process.env.CARD, require('./routes/card'))
 app.use(process.env.SHOPPINGLIST, require('./routes/shoppinglist'))
 app.use(process.env.ACTIVITY, require('./routes/activity'))
 app.use(process.env.VARIABLE, require('./routes/variable'))
+app.use(process.env.DATEFRONTEND, require('./routes/dietfrontend'))
+app.use(process.env.DATE, require('./routes/dietbackend'))
+app.use(process.env.DATE2, require('./routes/dietbackend2'))
 
 module.exports = app;

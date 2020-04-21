@@ -134,13 +134,15 @@ productCtrl.updateProduct = async (req, res) => {
 productCtrl.deleteProduct = async (req, res) => {
     const {deleteLabelByIdProduct} = require('./labelcontroller');
     const {deleteProductToShoppingList} = require('./shoppinglistcontroller');
+    const {deleteDietProductByProduct} = require('./dietcontroller');
 
     //Si vamos a eliminar un producto, tenemos que eliminar todas las etiquetas asociadas a ese producto.
     const pr = await Product.findOne({_id: req.params.id});
     deleteLabelByIdProduct(pr.id);
     
-    //Si vamos a eliminar un producto, tenemos que eliminar ese producto de la lista de la compra.
+    //Si vamos a eliminar un producto, tenemos que eliminar ese producto de la lista de la compra y de la dieta de los usuarios.
     deleteProductToShoppingList({params: {id: 'product', idProduct: req.params.id, end: 'false'}});
+    deleteDietProductByProduct({params: {productId: pr._id}})
 
     //Eliminamos el producto
     await Product.findOneAndDelete({_id: req.params.id});

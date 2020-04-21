@@ -64,6 +64,12 @@ server.on('message', (str) => {
                     if(user.data.length != 0){
                         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.EGGSNAMESL, imageUrl: process.env.EGG_IMG_URL});
                     } 
+
+                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Huevo").then(function(dietproduct){
+                        if(dietproduct.data.length != 0){
+                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                        } 
+                    });
                 });
             }
 
@@ -90,6 +96,12 @@ server.on('message', (str) => {
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                     if(user.data.length != 0){
                         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.REFRESHMENTSNAMESL, imageUrl: process.env.REFRESHMENT_IMG_URL});
+                    
+                        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Refresco").then(function(dietproduct){
+                        if(dietproduct.data.length != 0){
+                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                        } 
+                    });
                     } 
                 });
             }
@@ -117,6 +129,12 @@ server.on('message', (str) => {
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                     if(user.data.length != 0){
                         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.MILKSNAMESL, imageUrl: process.env.MILK_IMG_URL});
+                    
+                        axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Leche").then(function(dietproduct){
+                        if(dietproduct.data.length != 0){
+                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                        } 
+                    });
                     } 
                 });
             }
