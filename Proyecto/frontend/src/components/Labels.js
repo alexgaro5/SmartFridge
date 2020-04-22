@@ -32,7 +32,7 @@ export default class Labels extends Component {
         this.setState({labels: labels.data});
 
         this.state.labels.forEach(async (label) => {
-            const product = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + label.idProduct);
+            const product = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + label.idProduct + "&false");
 
             if(product.data != null){
                 product.data._id = label._id;
@@ -140,7 +140,7 @@ export default class Labels extends Component {
                                             </div>
                                             <div className="form-group">
                                                 <label htmlFor="amount">Cantidad:</label>
-                                                <input type="number" name="amount" defaultValue='1' min='0' max='100' className="form-control" required/>
+                                                <input type="number" name="amount" defaultValue='1' min='1' max='100' className="form-control" required/>
                                                 <div className="text-center">
                                                     <input style={{marginTop: 10, marginRight: 40}} type="button" className="btn btn-xs btn-primary" value="-" onClick={() => this.modifyAmount("formcreate","amount",-1)}></input> 
                                                     <input style={{marginTop: 10}} type="button" className="btn btn-xs btn-primary" value="+" onClick={() => this.modifyAmount("formcreate","amount",+1)}></input>

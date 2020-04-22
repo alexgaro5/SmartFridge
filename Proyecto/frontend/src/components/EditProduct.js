@@ -19,7 +19,7 @@ export default class EditProduct extends Component {
 
     //Obtendrá el producto que tenga la ID que hemos obtenido y la guardará en "product" para editarla mas tarde.
     getProduct = async () => {
-        const res = await axios.get(this.update);
+        const res = await axios.get(this.update + "&false");
         this.setState({product: res.data});
     }
 
@@ -65,7 +65,7 @@ export default class EditProduct extends Component {
                                 <form action={this.update} method="post" name="form">
                                     <input type="hidden" name="end" value='false'/>
                                     <div className="form-group">
-                                        <label htmlFor="name">Nombre:</label>
+                                        <label htmlFor="name">Nombre del producto:</label>
                                         <input type="text" name="name" defaultValue={this.state.product.name} className="form-control" required/>
                                     </div>
                                     <div className="form-group">
@@ -77,7 +77,7 @@ export default class EditProduct extends Component {
                                         </div>
                                     </div>
                                     <div className="form-group">
-                                        <label htmlFor="category">Categoria:</label>
+                                        <label htmlFor="category">Categoría:</label>
                                         <select id="category" name="category" className="form-control" defaultValue={this.state.product.category} required>
                                             {(this.state.product.category === "Leche y derivados") ? <option value="Leche y derivados" selected>Leche y derivados</option> : <option value="Leche y derivados">Leche y derivados</option>}
                                             {(this.state.product.category === "Carnes, pescados y huevos") ? <option value="Carnes, pescados y huevos" selected>Carnes, pescados y huevos</option> : <option value="Carnes, pescados y huevos">Carnes, pescados y huevos</option>}

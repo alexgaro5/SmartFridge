@@ -24,7 +24,7 @@ export default class EditLabel extends Component {
         const res = await axios.get(this.update);
         this.setState({label: res.data});
 
-        const product = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + this.state.label.idProduct);
+        const product = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + this.state.label.idProduct + "&false");
         this.setState({name: product.data.name});
     }
 
@@ -75,7 +75,7 @@ export default class EditLabel extends Component {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="amount">Cantidad:</label>
-                                        <input type="number" name="amount" defaultValue={this.state.label.amount} min='0' max='100' className="form-control" required/>
+                                        <input type="number" name="amount" defaultValue={this.state.label.amount} min='1' max='100' className="form-control" required/>
                                     </div>
                                     <div className="text-center">
                                         <input style={{marginTop: 5, marginRight: 40}} type="button" className="btn btn-xs btn-primary" value="-" onClick={() => this.modifyAmount(-1)}></input> 

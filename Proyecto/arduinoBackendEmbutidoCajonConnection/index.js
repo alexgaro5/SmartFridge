@@ -80,7 +80,19 @@ server.on('message', (str) => {
                 if(user.data.length != 0){
                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.SAUSAGESNAMESL, imageUrl: process.env.SAUSAGE_IMG_URL});
                     
-                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Embutido").then(function(dietproduct){
+                    var now = new Date();     
+                    var day = now.getDay();
+                    var hour = now.getHours();
+
+                    if(hour >= 8 && hour < 12){
+                        hour = 0;
+                    }else if(hour >= 12 && hour < 20){
+                        hour = 1;
+                    }else{
+                        hour = 2;
+                    }
+
+                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Embutido&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
                             axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 

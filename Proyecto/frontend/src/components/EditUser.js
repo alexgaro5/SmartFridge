@@ -19,7 +19,9 @@ export default class EditUser extends Component {
 
     //Obtendrá el usuario que tenga la ID que hemos obtenido y la guardará en "product" para editarla mas tarde.
     getUser = async () => {
-        const res = await axios.get(this.update);
+        console.log(this.update + "&false")
+        const res = await axios.get(this.update + "&false");
+        console.log(res)
         this.setState({user: res.data});
     }
 

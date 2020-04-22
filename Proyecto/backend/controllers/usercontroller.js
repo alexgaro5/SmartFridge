@@ -25,7 +25,12 @@ userCtrl.getUsers = async (req, res) => {
 */
 userCtrl.getUserById = async (req, res) => { 
     const usr = await User.findOne({_id: req.params.id});
-    res.json(usr);
+
+    if(req.params.backend == "true"){
+        return usr;
+    }else{
+        res.json(usr);
+    }
 }
 
 /** 

@@ -22,6 +22,22 @@ server.bind(process.env.PORT_RASPBERRY_RFID_ARDUINO, process.env.IP_RASPBERRY);
 //Comprobar cada hora si el controlador tiene comunicación.
 setInterval(() => CheckControllerStatus(), 3600000);
 
+//Comprobar cada hora si se ha seguido la dieta.
+//setInterval(() => CheckDietStatus(), 3600000);
+setInterval(() => CheckDietStatus(), 20000);
+
+var now = new Date();   
+var hour = now.getHours();
+var flagMorning, flagAfternoon, flagNight;
+
+if(hour >= 8 && hour < 12){
+    flagMorning = true;
+}else if(hour >= 12 && hour < 20){
+    flagAfternoon = true;
+}else {
+    flagNight = true;
+}
+
 //Si hay algún error en la conexión, nos informará por consola cual es.
 server.on('error', (err) => {
     console.log(`server error:\n${err.stack}`);
@@ -114,7 +130,7 @@ server.on('message', (str) => {
             //Si el producto que se está añadiendo confirmamos que es un producto, tendremos la ID en el contentRfid.
             if(type == 'P'){
                 //Buscamos el producto en el backend con el ID contenido en la tarjeta.
-                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid).then(function(product) {
+                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid.split("#")[0] + "&false").then(function(product) {
                     //Si el producto existe, anumentamos la cantidad en la nevera a mas 1, si no, mostraremos error por consola.
                     if(product.data != null){
                         axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount + 1, end: "true"});
@@ -130,7 +146,7 @@ server.on('message', (str) => {
             //Si el producto que se está añadiendo confirmamos que es un producto, tendremos la ID en el contentRfid.
             if(type == 'P'){
                 //Buscamos el producto en el backend con el ID contenido en la tarjeta.
-                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid).then(function(product) {
+                axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid + "&false").then(function(product) {
                     //Si el producto existe, disminuimos la cantidad en la nevera a menos 1, si no, mostraremos error por consola.
                     if(product.data != null){
                         //Si el número de productos es erróneo, se mostrará un error, en caso contrario, disminuimos la cantidad en la nevera a menos 1
@@ -143,9 +159,21 @@ server.on('message', (str) => {
                                 if(user.data.length != 0){
                                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: product.data.name, imageUrl: product.data.imageUrl});
                                     
-                                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET2 + user.data[0]._id + "&" + product.data._id).then(function(dietproduct){
+                                    var now = new Date();     
+                                    var day = now.getDay();
+                                    var hour = now.getHours();
+
+                                    if(hour >= 8 && hour < 12){
+                                        hour = 0;
+                                    }else if(hour >= 12 && hour < 20){
+                                        hour = 1;
+                                    }else{
+                                        hour = 2;
+                                    }
+                                   
+                                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET2 + user.data[0]._id + "&" + product.data._id + "&" + day + "&" + hour).then(function(dietproduct){
                                         if(dietproduct.data.length != 0){
-                                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND2 + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                                         } 
                                     });
                                 } 
@@ -190,6 +218,27 @@ function CheckControllerStatus(){
             sendemail = false;
             sendEmail();
         }
+    }
+}
+
+//Se comprueba el tiempo que ha pasasdo desde la ultima conexión del controlador. Si es mayor a un día, se envía un aviso por correo.
+function CheckDietStatus(){
+    var now = new Date();     
+    var day = now.getDay();
+    var hour = now.getHours();
+    
+    if(hour >= 8 && hour < 12 && flagMorning){
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&2");
+        flagMorning = false;
+        flagAfternoon = true;
+    }else if(hour >= 12 && hour < 20 && flagAfternoon){
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&0");
+        flagAfternoon = false;
+        flagNight = true;
+    }else if(flagNight){
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&1");
+        flagNight = false;
+        flagMorning = true;
     }
 }
 

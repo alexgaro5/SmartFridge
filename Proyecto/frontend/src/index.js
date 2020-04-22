@@ -23,7 +23,7 @@ import Variable from './components/Variable';
 import ShoppingList from './components/ShoppingList';
 import Activity from './components/Activity';
 import Diet from './components/Diet';
-
+import EditDiet from './components/EditDiet';
 
 const someone = isSomeoneConnected();
 var messageMainLogin = '';
@@ -56,6 +56,7 @@ function App() {
         <Route path="/shoppinglist" exact component={ShoppingList}/>
         <Route path="/activity" exact component={Activity}/>
         <Route path="/diet" exact component={Diet}/>
+        <Route path="/editdiet" exact component={EditDiet}/>
       </div>
     </Router>
   );

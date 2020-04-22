@@ -211,7 +211,7 @@ export default class Products extends Component {
 
                                         <form action={process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT} method="post" name="form">
                                             <div className="form-group">
-                                                <label htmlFor="name">Nombre de producto:</label>
+                                                <label htmlFor="name">Nombre del producto:</label>
                                                 <input type="text" name="name" className="form-control" required/>
                                             </div>
                                             <div className="form-group">
@@ -223,7 +223,7 @@ export default class Products extends Component {
                                                 </div>
                                             </div>
                                             <div className="form-group">
-                                                <label htmlFor="category">Categoria:</label>
+                                                <label htmlFor="category">Categoría:</label>
                                                 <select id="category" name="category" className="form-control" required>
                                                     <option value="Leche y derivados">Leche y derivados</option>
                                                     <option value="Carnes, pescados y huevos">Carnes, pescados y huevos</option>
@@ -252,8 +252,8 @@ export default class Products extends Component {
                                     <div className="col-xl-2 col-md-3 col-sm-4 center-block">
                                         <ul className="nopointul text-center">
                                             <li><img src={process.env.REACT_APP_IMAGES + "water.png"} alt={"agua.png"} height="100px" className="maxwidth"></img></li>
-                                            <li><strong>Deposito de agua</strong></li>
-                                            <li>Estado: {this.state.levelwater.status ? "Lleno" : "Vacio"}</li>
+                                            <li><strong>Depósito de agua</strong></li>
+                                            <li>Estado: {this.state.levelwater.status ? "Lleno" : "Vacío"}</li>
                                         </ul>
                                     </div>
                                     <br/>
@@ -330,7 +330,7 @@ export default class Products extends Component {
                                         }
                                     </div>
                                     <br/>
-                                    <h3>Verduras y Hortalizas</h3>
+                                    <h3>Verduras y hortalizas</h3>
                                     <br/>
                                     <div className="row">
                                         <div className="col-xl-2 col-md-3 col-sm-4 center-block">

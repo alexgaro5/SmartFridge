@@ -32,10 +32,6 @@ server.on('error', (err) => {
 //Si la conexión se crea con éxito, nos lo notificará por consola.
 server.on('listening', () => {
     console.log('Connection is opened');
-    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableright", idProduct: "0", name: process.env.VEGETABLERIGHTNAMESL, msg: process.env.VEGETABLERIGHTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
-    axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableright&0&true");
-    axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "vegetableleft", idProduct: "0", name: process.env.VEGETABLELEFTNAMESL, msg: process.env.VEGETABLELEFTEMPTY, imageUrl: process.env.VEGETABLE_IMG_URL, end: "true"});
-    axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "vegetableleft&0&true");
 });
 
 //Si llega un paquete de la Arduino...
@@ -63,7 +59,19 @@ server.on('message', (str) => {
                 if(user.data.length != 0){
                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.VEGETABLELEFTNAMESL, imageUrl: process.env.VEGETABLE_IMG_URL});
                 
-                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura").then(function(dietproduct){
+                    var now = new Date();     
+                    var day = now.getDay();
+                    var hour = now.getHours();
+
+                    if(hour >= 8 && hour < 12){
+                        hour = 0;
+                    }else if(hour >= 12 && hour < 20){
+                        hour = 1;
+                    }else{
+                        hour = 2;
+                    }
+
+                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
                             axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 
@@ -92,7 +100,19 @@ server.on('message', (str) => {
                 if(user.data.length != 0){
                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.VEGETABLERIGHTNAMESL, imageUrl: process.env.VEGETABLE_IMG_URL});
                     
-                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura").then(function(dietproduct){
+                    var now = new Date();     
+                    var day = now.getDay();
+                    var hour = now.getHours();
+
+                    if(hour >= 8 && hour < 12){
+                        hour = 0;
+                    }else if(hour >= 12 && hour < 20){
+                        hour = 1;
+                    }else{
+                        hour = 2;
+                    }
+
+                    axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
                             axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 

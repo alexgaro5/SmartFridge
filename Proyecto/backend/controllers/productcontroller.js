@@ -28,7 +28,11 @@ productCtrl.getProductByID = async (req, res) => {
         var pr = await Product.findOne({_id: req.params.id});
     }
     
-    res.json(pr);
+    if(req.params.backend == 'true'){
+        return pr;
+    }else{
+        res.json(pr);
+    }
 }
 
 /** 

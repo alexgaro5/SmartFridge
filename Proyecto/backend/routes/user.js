@@ -10,11 +10,16 @@ router.route('/')
     .post(userCtrl.createUser)
 
 /** 
- * Descripción: Si llega un get, post y delete serán reenviados a los métodos 'getUserById' y 'deleteUser' de usercontroller.
+ * Descripción: Si llega un post o delete serán reenviados a los métodos 'updateUser' y 'deleteUser' de usercontroller.
 */
 router.route('/:id')
-    .get(userCtrl.getUserById)
     .post(userCtrl.updateUser)
     .delete(userCtrl.deleteUser)
+
+/** 
+ * Descripción: Si llega un get serán reenviados a los métodos 'getUserById' de usercontroller.
+*/
+router.route('/:id&:backend')
+    .get(userCtrl.getUserById)
 
 module.exports = router;

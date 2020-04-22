@@ -5,14 +5,14 @@ const dietCtrl = require('../controllers/dietcontroller');
 /** 
  * Descripción: Si llega un get, serán reenviados al método 'getDietProductByUserAndDay' de dietcontroller.
 */
-router.route('/:userId')
-    .get(dietCtrl.getDietProductByUser)
+router.route('/:productDietId')
+    .get(dietCtrl.getDietProductByID)
 
 /** 
- * Descripción: Si llega un post, serán reenviados al método 'createDietProduct' de dietcontroller.
+ * Descripción: Si llega un post, serán reenviados al método 'updateDietProduct' de dietcontroller.
 */
-router.route('/')
-    .post(dietCtrl.createDietProduct)
+router.route('/:productDietId')
+    .post(dietCtrl.updateDietProduct)
 
 /** 
  * Descripción: Si llega un delete, serán reenviados al método 'deleteDietProduct' de dietcontroller.

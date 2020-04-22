@@ -5,7 +5,7 @@ const dietCtrl = require('../controllers/dietcontroller');
 /** 
  * Descripción: Si llega un get, serán reenviados al método 'getDietProductByUserAndName' de dietcontroller.
 */
-router.route('/:userId&:name')
+router.route('/:userId&:name&:day&:partOfDay')
     .get(dietCtrl.getDietProductByUserAndName)
 
 /** 

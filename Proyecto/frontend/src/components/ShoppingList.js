@@ -22,7 +22,7 @@ export default class ShoppingList extends Component {
             var productToAdd = {};
 
             if(product.id === 'product'){
-                const pr = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + product.idProduct);
+                const pr = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT + product.idProduct + "&false");
                 productToAdd.name = pr.data.name;
                 productToAdd.imageUrl = pr.data.imageUrl;
             }else{
