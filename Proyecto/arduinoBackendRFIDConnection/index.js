@@ -235,7 +235,7 @@ function CheckDietStatus(){
         axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&0");
         flagAfternoon = false;
         flagNight = true;
-    }else if(flagNight){
+    }else if((hour >= 20 || hour < 8) && bflagNight){
         axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&1");
         flagNight = false;
         flagMorning = true;

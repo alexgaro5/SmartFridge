@@ -181,23 +181,56 @@ dietCtrl.deleteDietProductByProduct = async (req, res) => {
  * Devolución del método: Nada.
 */
 dietCtrl.checkAmount = async (req, res) => {
+    const now = new Date();
     const users = await User.find(); 
-    const day = req.params.day;
-    const partOfDay = req.params.partOfDay;
 
+    
     users.map(async user => {
 
-        var products = await Diet.find({userId: user._id, day: day, partOfDay: partOfDay});
+        var day = now.getDay().toString();
+        const hour = now.getHours();
+        var partOfDay;
+
+        if(hour >= 8 && hour < 12) partOfDay = "0";
+        else if(hour >= 12 && hour < 20) partOfDay = "1";
+        else if(flagNight) partOfDay = "2";
+
+        const email = user.email;
+        const productNames = [];
+
+        const products = await Diet.find({userId: user._id, day: day, partOfDay: partOfDay});
 
         if(products.length != 0){
-
-            var productNames = [];
-
             Promise.all(products.map(async product => {
 
-                if(product.remainingAmount != 0){
+                var name;
+
+                if(product.productId != null){
+                    const {getProductByID} = require('./productcontroller');
+                    const product2 = await getProductByID({params: {id: product.productId, backend: 'true'}});
+                    name = product2.name;
+                }else{
+                    name = product.name;
+                }
+            
+                productNames.push(name + " (" + product.amountPerDay + " ud.)");
     
-                    var name;
+            })).then(() => {
+
+                dietCtrl.sendEmailDietProducts({email, productNames, day, partOfDay});
+            })
+        }
+
+        var day2 = req.params.day;
+        var partOfDay2 = req.params.partOfDay;
+
+        const products2 = await Diet.find({userId: user._id, day: day2, partOfDay: partOfDay2});
+        const productNames2 = [];
+        if(products2.length != 0){
+
+            Promise.all(products2.map(async product => {
+
+                if(product.remainingAmount != 0){
         
                     if(product.productId != null){
                         const {getProductByID} = require('./productcontroller');
@@ -207,7 +240,7 @@ dietCtrl.checkAmount = async (req, res) => {
                         name = product.name;
                     }
                 
-                    productNames.push(name);
+                    productNames2.push(name);
                 }
         
                 product.remainingAmount = product.amountPerDay;
@@ -215,8 +248,7 @@ dietCtrl.checkAmount = async (req, res) => {
                 await product.save();   
             })).then(() => {
 
-                const email = user.email;
-                dietCtrl.sendEmail({email, productNames, day, partOfDay})
+                dietCtrl.sendEmailRemainingAmount({email, productNames2, day2, partOfDay2})
             })
         }
     });
@@ -229,12 +261,9 @@ dietCtrl.checkAmount = async (req, res) => {
  * Parámetros de entrada: email, token.
  * Devolución del método: Nada.
 */
-dietCtrl.sendEmail = function(req, res){
+dietCtrl.sendEmailDietProducts = function(req, res){
     const {email, productNames} = req;
     var {day, partOfDay} = req;
-
-    const lastProduct = productNames[productNames.length - 1];
-    productNames.pop();
 
     switch(day){
         case "0": day = "Domingo"; break;
@@ -263,6 +292,65 @@ dietCtrl.sendEmail = function(req, res){
     var mailOptions = {
         from: 'SmartFridge',
         to: email,
+        subject: 'SmartFridge: Dieta para el '+day+' por la '+ partOfDay+'.',
+        html: 
+        `<html>
+            <body style="display: flex; align-items: center; background: #E0EAFC; height: 600px;">
+                <div style="position: relative; margin: auto; width: 1000px; background-color: white; border-radius: 10px 10px 10px 10px;">
+                    <div style="text-align: center; margin: 0px;">
+                        <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
+                        <h1 style="margin: 0px;">SmartFridge</h1>
+                        <h1 style="margin: 0px;">Dieta del `+day+` por la `+partOfDay+`</h1>
+                        <h4 style="margin-left: 25px; margin-right: 25px; margin-bottom: 25px;">Los productos que debes de consumir son: `+productNames+`.</h2>
+                    </div>
+                </div>
+            </body>
+        </html>`
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+        if (error){
+            console.log(error);
+        }
+    });
+};
+
+/** 
+ * Descripción: Método privado para enviar un correo electrónico para anunciar de que un producto no ha sido consumido.
+ * Parámetros de entrada: email, token.
+ * Devolución del método: Nada.
+*/
+dietCtrl.sendEmailRemainingAmount = function(req, res){
+    const {email, productNames2} = req;
+    var {day2, partOfDay2} = req;
+
+    switch(day2){
+        case "0": day2 = "Domingo"; break;
+        case "1": day2 = "Lunes"; break;
+        case "2": day2 = "Martes"; break;
+        case "3": day2 = "Miércoles"; break;
+        case "4": day2 = "Jueves"; break;
+        case "5": day2 = "Viernes"; break;
+        case "6": day2 = "Sábado"; break;
+    }
+
+    switch(partOfDay2){
+        case "0": partOfDay2 = "mañana"; break;
+        case "1": partOfDay2 = "tarde"; break;
+        case "2": partOfDay2 = "noche"; break;
+    }
+
+    var transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'smartfridgeual@gmail.com',
+            pass: 'Smartfridgeual1'
+        }
+    });
+
+    var mailOptions = {
+        from: 'SmartFridge',
+        to: email,
         subject: 'SmartFridge: No ha consumido los productos de la dieta.',
         html: 
         `<html>
@@ -272,8 +360,8 @@ dietCtrl.sendEmail = function(req, res){
                         <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
                         <h1 style="margin: 0px;">SmartFridge</h1>
                         <h1 style="margin: 0px;">No has seguido la dieta</h1>
-                        <h2 style="margin-left: 25px; margin-right: 25px;">No has seguido la dieta programada para el `+day+` por la `+partOfDay+`</h2>
-                        <h4 style="margin-left: 25px; margin-right: 25px; margin-bottom: 25px;">Los productos no consumidos son `+productNames+` y `+lastProduct+`.</h2>
+                        <h2 style="margin-left: 25px; margin-right: 25px;">No has seguido la dieta programada para el `+day2+` por la `+partOfDay2+`.</h2>
+                        <h4 style="margin-left: 25px; margin-right: 25px; margin-bottom: 25px;">Los productos no consumidos son: `+productNames2+`.</h2>
                     </div>
                 </div>
             </body>
