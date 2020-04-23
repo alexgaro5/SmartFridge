@@ -6,6 +6,7 @@ require('dotenv').config({path: path});
 const nodemailer = require('nodemailer');
 
 const Diet = require('../models/Diet');
+const User = require('../models/User');
 const dietCtrl = {};
 
 /** 
@@ -180,34 +181,44 @@ dietCtrl.deleteDietProductByProduct = async (req, res) => {
  * Devolución del método: Nada.
 */
 dietCtrl.checkAmount = async (req, res) => {
-    var pr = await Diet.find({day: req.params.day, partOfDay: req.params.partOfDay});
+    const users = await User.find(); 
+    const day = req.params.day;
+    const partOfDay = req.params.partOfDay;
 
-    pr.map(async product => {
+    users.map(async user => {
 
-        if(product.remainingAmount != 0){
-            const {getUserById} = require('./usercontroller');
-            const user = await getUserById({params: {id: product.userId, backend: 'true'}});
-            const email = user.email;
+        var products = await Diet.find({userId: user._id, day: day, partOfDay: partOfDay});
 
-            var name;
+        if(products.length != 0){
 
-            if(product.productId != null){
-                const {getProductByID} = require('./productcontroller');
-                const product2 = await getProductByID({params: {id: product.productId, backend: 'true'}});
-                name = product2.name;
-            }else{
-                name = product.name;
-            }
-        
-            dietCtrl.sendEmail({email, name})
-            
-        }
+            var productNames = [];
 
-        product.remainingAmount = product.amountPerDay;
+            Promise.all(products.map(async product => {
+
+                if(product.remainingAmount != 0){
     
-        await product.save();   
-
+                    var name;
         
+                    if(product.productId != null){
+                        const {getProductByID} = require('./productcontroller');
+                        const product2 = await getProductByID({params: {id: product.productId, backend: 'true'}});
+                        name = product2.name;
+                    }else{
+                        name = product.name;
+                    }
+                
+                    productNames.push(name);
+                }
+        
+                product.remainingAmount = product.amountPerDay;
+            
+                await product.save();   
+            })).then(() => {
+
+                const email = user.email;
+                dietCtrl.sendEmail({email, productNames, day, partOfDay})
+            })
+        }
     });
     
     res.end();
@@ -219,7 +230,27 @@ dietCtrl.checkAmount = async (req, res) => {
  * Devolución del método: Nada.
 */
 dietCtrl.sendEmail = function(req, res){
-    const {email, name} = req;
+    const {email, productNames} = req;
+    var {day, partOfDay} = req;
+
+    const lastProduct = productNames[productNames.length - 1];
+    productNames.pop();
+
+    switch(day){
+        case "0": day = "Domingo"; break;
+        case "1": day = "Lunes"; break;
+        case "2": day = "Martes"; break;
+        case "3": day = "Miércoles"; break;
+        case "4": day = "Jueves"; break;
+        case "5": day = "Viernes"; break;
+        case "6": day = "Sábado"; break;
+    }
+
+    switch(partOfDay){
+        case "0": partOfDay = "mañana"; break;
+        case "1": partOfDay = "tarde"; break;
+        case "2": partOfDay = "noche"; break;
+    }
 
     var transporter = nodemailer.createTransport({
         service: 'Gmail',
@@ -240,8 +271,9 @@ dietCtrl.sendEmail = function(req, res){
                     <div style="text-align: center; margin: 0px;">
                         <img src="https://i.ibb.co/jGjfZYk/logo.png" alt="logo" height="70" width="70" style="margin-top: 25px;">
                         <h1 style="margin: 0px;">SmartFridge</h1>
-                        <h1 style="margin: 0px;">No ha seguido la dieta</h1>
-                        <h2 style="margin-left: 25px; margin-right: 25px; margin-bottom: 25px;">El producto '`+name+`' no ha sido consumido en el periodo que estipula la dieta programada para tu usuario.</h2>
+                        <h1 style="margin: 0px;">No has seguido la dieta</h1>
+                        <h2 style="margin-left: 25px; margin-right: 25px;">No has seguido la dieta programada para el `+day+` por la `+partOfDay+`</h2>
+                        <h4 style="margin-left: 25px; margin-right: 25px; margin-bottom: 25px;">Los productos no consumidos son `+productNames+` y `+lastProduct+`.</h2>
                     </div>
                 </div>
             </body>

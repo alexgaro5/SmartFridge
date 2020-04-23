@@ -24,7 +24,7 @@ setInterval(() => CheckControllerStatus(), 3600000);
 
 //Comprobar cada hora si se ha seguido la dieta.
 //setInterval(() => CheckDietStatus(), 3600000);
-setInterval(() => CheckDietStatus(), 20000);
+setInterval(() => CheckDietStatus(), 1000);
 
 var now = new Date();   
 var hour = now.getHours();
@@ -228,7 +228,7 @@ function CheckDietStatus(){
     var hour = now.getHours();
     
     if(hour >= 8 && hour < 12 && flagMorning){
-        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&2");
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + (day-1) + "&2");
         flagMorning = false;
         flagAfternoon = true;
     }else if(hour >= 12 && hour < 20 && flagAfternoon){

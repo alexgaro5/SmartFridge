@@ -37,9 +37,7 @@ activityCtrl.createActivity = async (req, res) => {
 */
 activityCtrl.deleteAllActivity = async (req, res) => {
 
-    if(req.body.date == null){
-        await Activity.deleteMany({userId: req.params.userId});
-    }
+    await Activity.deleteMany({userId: req.params.userId});
     
     if(req.params.end){
         res.end();
