@@ -5,11 +5,11 @@ import axios from 'axios';
 require('dotenv').config();
 require('@fortawesome/fontawesome-free/js/all')
 
-//La página de editar etiquetas
+//La página de editar dieta
 export default class EditDiet extends Component {
 
-    //Creamos las variables label (para guardar la etiqueta a modificar), message (por si hay que mostrar alguno)
-    //vars (para recoger la ID de la etiqueta a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al)
+    //Creamos las variables diet (para guardar la dieta a modificar), message (por si hay que mostrar alguno)
+    //vars (para recoger la ID de la dieta a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al backend)
     state = {
         diet: [],
     }
@@ -17,7 +17,7 @@ export default class EditDiet extends Component {
     vars = getUrlVariables();
     update = process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_DIETFRONTEND2 + this.vars['diet'];
 
-    //Obtendrá la etiqueta que tenga la ID que hemos obtenido y la guardará en "label" para editarla mas tarde.
+    //Obtendrá el producto de la dieta que tenga la ID que hemos obtenido y la guardará en "diet" para editarla mas tarde.
     getDiet = async () => {
         const diet = await axios.get(this.update);
 
@@ -48,7 +48,7 @@ export default class EditDiet extends Component {
         return null;
     }
 
-    //Cuando el componente esté montado, se llamará al método getLabel() para obtener los datos de la etiqueta y mostrarlos, y mas tarde modificarlos.
+    //Cuando el componente esté montado, se llamará al método getDiet() para obtener los datos de la etiqueta y mostrarlos, y mas tarde modificarlos.
     async componentDidMount(){
         this.getDiet();
     }

@@ -166,7 +166,7 @@ export default class Labels extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={label.imageUrl} alt={label.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{label.name}</strong></li>
-                                                        <li>Cantidad: {label.amount}</li>
+                                                        <li>Cantidad: {label.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editLabel(label._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteLabel(label._id , label.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>

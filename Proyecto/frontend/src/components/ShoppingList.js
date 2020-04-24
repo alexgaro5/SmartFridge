@@ -13,7 +13,7 @@ export default class ShoppingList extends Component {
         slToShow: []
     }
 
-    //Envia una peticion para obtener la lista de la compra y añadirla a la variable "sl"
+    //Envia una peticion para obtener la lista de la compra y añadirla a la variable "slToShow"
     getShoppingList = async () => {
         const sl = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_SHOPPINGLIST);
         this.setState({sl: sl.data});

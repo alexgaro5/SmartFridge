@@ -5,12 +5,13 @@ require('dotenv').config({path: path});
 //Libreria para enviar correos electrónicos.
 const nodemailer = require('nodemailer');
 
+//Importamos los modelos de Diet y User para usarlos después.
 const Diet = require('../models/Diet');
 const User = require('../models/User');
 const dietCtrl = {};
 
 /** 
- * Descripción: Devuelve si hay algun producto en la dieta de un usuario en un día en concreto.
+ * Descripción: Devuelve si hay algun producto en la dieta por su ID interno.
  * Parámetros de entrada: userId y day.
  * Devolución del método: productos.
 */
@@ -20,7 +21,7 @@ dietCtrl.getDietProductByID = async (req, res) => {
 }
 
 /** 
- * Descripción: Devuelve si hay algun producto en la dieta de un usuario en un día en concreto.
+ * Descripción: Devuelve si hay algun producto en la dieta de un usuario.
  * Parámetros de entrada: userId y day.
  * Devolución del método: productos.
 */
@@ -57,14 +58,17 @@ dietCtrl.getDietProductByUserAndName = async (req, res) => {
 dietCtrl.createDietProduct = async (req, res) => {
     var {userId, productId, amountPerDay, day, partOfDay} = req.body;
     
+    //Si el ID del producto es menor de 10 carácteres, significa que es el nombre, por lo que cambiamos el contenido de variable.
     if(productId.length < 10){
         name = productId;
         productId = null;
     }
 
+    //Si el id del producto es nula, el producto viene referenciado por el nombre, si no, tenemos que gaurdar la ID delm producto como tal.
     if(productId != null){
         const pr =  await Diet.find({userId: userId, productId: productId, day: day, partOfDay: partOfDay});
 
+        //Si no hay ningun producto en la dieta del usuario en el dia y parte del dia especificado, se crea, si hay, se avisa.
         if(pr.length == 0){
             const newProduct = new Diet({
                 userId: userId,
@@ -83,6 +87,7 @@ dietCtrl.createDietProduct = async (req, res) => {
     }else{
         const pr = await Diet.find({name: name, userId: userId, day: day, partOfDay: partOfDay});
 
+        //Si no hay ningun producto en la dieta del usuario en el dia y parte del dia especificado, se crea, si hay, se avisa.
         if(pr.length == 0){
 
             switch(name){
@@ -120,10 +125,12 @@ dietCtrl.createDietProduct = async (req, res) => {
 dietCtrl.updateDietProduct = async (req, res) => {
     var {amountPerDay, remainingAmount, partOfDay, end} = req.body;
 
+    //Obtenemos el producto der la dieta a actualizar
     var pr = await Diet.find({_id: req.params.productDietId});
     pr = pr[0];
 
     if(amountPerDay != null){
+
         if(pr.amountPerDay != amountPerDay){
             pr.amountPerDay = amountPerDay;
             pr.remainingAmount = amountPerDay;
@@ -133,7 +140,6 @@ dietCtrl.updateDietProduct = async (req, res) => {
     
         if(partOfDay != null) pr.partOfDay = partOfDay;
     
-        
     }else{
         pr.remainingAmount = remainingAmount;
     }
@@ -176,17 +182,19 @@ dietCtrl.deleteDietProductByProduct = async (req, res) => {
 }
 
 /** 
- * Descripción: Comprueba las cantidades de todos los usuarios y avisa a quien no la consumido los productos especificados.
+ * Descripción: Comprueba las cantidades de todos los usuarios y avisa a quien no la consumido los productos especificados. También avisa de los productos que tiene
+ * que consumir cada usuario en el dia y momento del dia en el que se haga la llamada a este método.
  * Parámetros de entrada: day, partOfDay.
  * Devolución del método: Nada.
 */
 dietCtrl.checkAmount = async (req, res) => {
     const now = new Date();
     const users = await User.find(); 
-
     
+    //Para cada usuario...
     users.map(async user => {
 
+        //Obtenemos el dia y la parte del día actual.
         var day = now.getDay().toString();
         const hour = now.getHours();
         var partOfDay;
@@ -198,13 +206,17 @@ dietCtrl.checkAmount = async (req, res) => {
         const email = user.email;
         const productNames = [];
 
+        //Obtenemos los productos de la dieta de un usuario en el día y momento del día actual.
         const products = await Diet.find({userId: user._id, day: day, partOfDay: partOfDay});
 
+        //Si hay algun producto...
         if(products.length != 0){
+            //Por cada producto...
             Promise.all(products.map(async product => {
 
                 var name;
 
+                //Obtenemos el nombre del producto y la cantidad de este en la dieta y lo añadimos a un array.
                 if(product.productId != null){
                     const {getProductByID} = require('./productcontroller');
                     const product2 = await getProductByID({params: {id: product.productId, backend: 'true'}});
@@ -217,21 +229,29 @@ dietCtrl.checkAmount = async (req, res) => {
     
             })).then(() => {
 
+                //Finalmente, enviamos el array junto con el email del usuario y el dia y la parte del día a un método externo para enviar un correo informativo.
                 dietCtrl.sendEmailDietProducts({email, productNames, day, partOfDay});
             })
         }
 
+        //Actuializamos el dia y la parte del dia con los que nos pasan por parámetro para comprobar si alguien tiene algun producto sin consumir en su dieta
+        //en el dia y parte del  dia especificado.
         var day2 = req.params.day;
         var partOfDay2 = req.params.partOfDay;
 
+        //Buscamos los productos del usuario en el dia y parte del dia especificado.-
         const products2 = await Diet.find({userId: user._id, day: day2, partOfDay: partOfDay2});
         const productNames2 = [];
-        if(products2.length != 0){
 
+        //Si hay algun producto...
+        if(products2.length != 0){
+            //Por cada producto...
             Promise.all(products2.map(async product => {
 
+                //Si hay productos todavíaa sin consumir...
                 if(product.remainingAmount != 0){
         
+                    //Se obtiene el nombre del producto y se añade a un array.
                     if(product.productId != null){
                         const {getProductByID} = require('./productcontroller');
                         const product2 = await getProductByID({params: {id: product.productId, backend: 'true'}});
@@ -243,11 +263,13 @@ dietCtrl.checkAmount = async (req, res) => {
                     productNames2.push(name);
                 }
         
+                //Actualizamos la cantiodad de productos a consumir a la cantidad especificada por día.
                 product.remainingAmount = product.amountPerDay;
             
                 await product.save();   
             })).then(() => {
 
+                //Finalmente, enviamos el array junto con el email del usuario y el dia y la parte del día a un método externo para enviar un correo informativo.
                 dietCtrl.sendEmailRemainingAmount({email, productNames2, day2, partOfDay2})
             })
         }
@@ -257,7 +279,7 @@ dietCtrl.checkAmount = async (req, res) => {
 }
 
 /** 
- * Descripción: Método privado para enviar un correo electrónico para anunciar de que un producto no ha sido consumido.
+ * Descripción: Método privado para enviar un correo electrónico para anunciar de los productos que debe de consumir un usuario en el dia y parte del dia que se especifican.
  * Parámetros de entrada: email, token.
  * Devolución del método: Nada.
 */

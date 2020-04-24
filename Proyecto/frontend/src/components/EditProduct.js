@@ -9,7 +9,7 @@ require('@fortawesome/fontawesome-free/js/all')
 export default class EditProduct extends Component {
 
     //Creamos las variables product (para guardar el producto a modificar), message (por si hay que mostrar alguno)
-    //vars (para recoger la ID del producto a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al)
+    //vars (para recoger la ID del producto a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al backend)
     state = {
         product: []
     }

@@ -55,6 +55,7 @@ server.on('message', (str) => {
         if((lastFruitLeftWeight - 0.30) >= split[1]){
             lastFruitLeftWeight = split[1];
             
+            //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                 if(user.data.length != 0){
                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.FRUITLEFTNAMESL, imageUrl: process.env.FRUIT_IMG_URL});
@@ -63,13 +64,9 @@ server.on('message', (str) => {
                     var day = now.getDay();
                     var hour = now.getHours();
 
-                    if(hour >= 8 && hour < 12){
-                        hour = 0;
-                    }else if(hour >= 12 && hour < 20){
-                        hour = 1;
-                    }else{
-                        hour = 2;
-                    }
+                    if(hour >= 8 && hour < 12) hour = 0;
+                    else if(hour >= 12 && hour < 20) hour = 1; 
+                    else khour = 2;
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Fruta&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
@@ -96,6 +93,7 @@ server.on('message', (str) => {
         if((lastFruitRighttWeight - 0.30) >= split[1]){
             lastFruitRighttWeight = split[1];
             
+            //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                 if(user.data.length != 0){
                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: process.env.FRUITRIGHTNAMESL, imageUrl: process.env.FRUIT_IMG_URL});
@@ -104,13 +102,9 @@ server.on('message', (str) => {
                     var day = now.getDay();
                     var hour = now.getHours();
 
-                    if(hour >= 8 && hour < 12){
-                        hour = 0;
-                    }else if(hour >= 12 && hour < 20){
-                        hour = 1;
-                    }else{
-                        hour = 2;
-                    }
+                    if(hour >= 8 && hour < 12) hour = 0;
+                    else if(hour >= 12 && hour < 20) hour = 1; 
+                    else khour = 2;
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Fruta&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){

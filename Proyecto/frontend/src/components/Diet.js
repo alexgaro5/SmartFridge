@@ -4,10 +4,13 @@ import axios from 'axios'
 import {getUrlVariables, isSomeoneConnected} from '../commonMethods';
 require('dotenv').config();
 
-//La página de la actividad de un usuario
+//La página de la dieta
 export default class Diet extends Component {
     
-    //Usamos la variable sl(para guardar la lista de la compra) y el slToShow(Para recoger la información de cada sl y mostrarla).
+    //Usamos la variable 'products' para guardar los productos existentes, la variable 'diet' para guardar los productos de la dieta de un usuario
+    //La variable 'dietMorningToShow', 'dietAfternoonToShow' y 'dietNightToShow' para clasificar los productos de la dieta por las partes de un día
+    //La variable 'daySelected' y 'partOfDaySelected' para guardar el dia y la parte del dia seleccionado para actualzar la página con los valores de este.
+    //Finalmente, la variable 'message' por si hay alguno que tengamos que mostrar y 'vars' para guardar las variables de la dirección web.
     state = {
         products: [],
         diet: [],
@@ -20,13 +23,13 @@ export default class Diet extends Component {
     message = '';
     vars = getUrlVariables();
 
-    //Obtiene todas las etiquetas existentes para ponerlas como opcion de selección en el formulario.
+    //Obtiene todos los productos existentes para ponerlas como opcion de selección en el formulario.
     getProducts = async () => {
         const res = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT);
         this.setState({products: res.data});
     }
 
-    //Envia una peticion para obtener la lista de la compra y añadirla a la variable "sl"
+    //Obtenemos los productos de una dieta de un usuario en un día especifico, y los organizamos por la parte del día en la que tenga que ser consumida.
     getDiet = async () => {
         const usr = document.cookie.toString().split("=")[1];
 
@@ -48,18 +51,15 @@ export default class Diet extends Component {
                         product.imageUrl = pr.data.imageUrl;
                     }
     
-                    if(product.partOfDay === 0){
-                        this.setState({dietMorningToShow: this.state.dietMorningToShow.concat(product)});
-                    }else if(product.partOfDay === 1){
-                        this.setState({dietAfternoonToShow: this.state.dietAfternoonToShow.concat(product)});
-                    }else{
-                        this.setState({dietNightToShow: this.state.dietNightToShow.concat(product)});
-                    }
+                    if(product.partOfDay === 0) this.setState({dietMorningToShow: this.state.dietMorningToShow.concat(product)});
+                    else if(product.partOfDay === 1) this.setState({dietAfternoonToShow: this.state.dietAfternoonToShow.concat(product)});
+                    else this.setState({dietNightToShow: this.state.dietNightToShow.concat(product)});
                 }
-            })
+            });
         }
     }
 
+    //Obtiene el dia y la parte del día actual y la guarda.
     getActualDate = () => {
         var now = new Date();     
         var day = now.getDay();
@@ -76,6 +76,7 @@ export default class Diet extends Component {
         this.setState({daySelected: day});
     }
 
+    //Si hay algun cambio en el dia seleccionado, se cambia y se vuelven a cargar los productos.
     onChange = () => {
         this.setState({daySelected: document.formdate.day.value});
         this.getDiet();
@@ -114,7 +115,7 @@ export default class Diet extends Component {
         return null;
     }
 
-    //Cuando el componente esté montado, se llamará al método getActivity() para obtener los datos de los usuarios y mostrarlos
+    //Cuando el componente esté montado, se llamará al método getActualDate(), getProducts() y getDiet() para obtener los datos y mostrarlos.
     async componentDidMount(){
         this.getActualDate();
         this.getProducts();
@@ -275,8 +276,8 @@ export default class Diet extends Component {
                                                     <ul className="nopointul text-center">
                                                     <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li><strong>Cantidad diaria: </strong>{product.amountPerDay}</li>
-                                                        <li><strong>Cantidad restante: </strong>{product.remainingAmount}</li>
+                                                        <li><strong>Cantidad diaria: </strong>{product.amountPerDay} ud.</li>
+                                                        <li><strong>Cantidad restante: </strong>{product.remainingAmount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>

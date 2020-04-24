@@ -9,7 +9,7 @@ require('@fortawesome/fontawesome-free/js/all')
 export default class EditUser extends Component {
 
     //Creamos las variables user (para guardar el usuario a modificar), message (por si hay que mostrar alguno)
-    //vars (para recoger la ID del usuario a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al)
+    //vars (para recoger la ID del usuario a modificar desde la dirección web) y update (la URL para hacer las peticiones necesarias al backend)
     state = {
         user: []
     }

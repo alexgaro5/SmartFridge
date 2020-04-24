@@ -32,7 +32,7 @@ export default class Products extends Component {
     message = '';
     vars = getUrlVariables();
 
-    //Metodo que envia la petición para obtener los productos de la nevera.
+    //Metodo que envia la petición para obtener los productos de la nevera y se clasifica.
     getProducts = async () => {
 
         const res = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_PRODUCT);
@@ -264,7 +264,7 @@ export default class Products extends Component {
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "milk.png"} alt={"leche.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Bricks de leche</strong></li>
-                                                <li>Cantidad: {this.state.milk.status}</li>
+                                                <li>Cantidad: {this.state.milk.status} ud.</li>
                                             </ul>
                                         </div>
                                         {
@@ -273,7 +273,7 @@ export default class Products extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li>Cantidad: {product.amount}</li>
+                                                        <li>Cantidad: {product.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>
@@ -288,14 +288,14 @@ export default class Products extends Component {
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "egg.png"} alt={"huevos.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Huevos</strong></li>
-                                                <li>Cantidad: {this.state.egg.status}</li>
+                                                <li>Cantidad: {this.state.egg.status} ud.</li>
                                             </ul>
                                         </div>
                                         <div className="col-xl-2 col-md-3 col-sm-4 center-block">
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "sausage.png"} alt={"embutido.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Embutido</strong></li>
-                                                <li>Peso: {this.state.sausage.status}</li>
+                                                <li>Peso: {this.state.sausage.status} kg.</li>
                                             </ul>
                                         </div>
                                         {
@@ -304,7 +304,7 @@ export default class Products extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li>Cantidad: {product.amount}</li>
+                                                        <li>Cantidad: {product.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>
@@ -322,7 +322,7 @@ export default class Products extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li>Cantidad: {product.amount}</li>
+                                                        <li>Cantidad: {product.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>
@@ -337,14 +337,14 @@ export default class Products extends Component {
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "vegetable.png"} alt={"verdurascajonizquierdo.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Verduras del cajón izquierdo</strong></li>
-                                                <li>Peso: {this.state.vegetableleft.status}</li>
+                                                <li>Peso: {this.state.vegetableleft.status} kg.</li>
                                             </ul>
                                         </div>
                                         <div className="col-xl-2 col-md-3 col-sm-4 center-block">
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "vegetable.png"} alt={"verdurascajonderecho.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Verduras del cajón derecho</strong></li>
-                                                <li>Peso: {this.state.vegetableright.status}</li>
+                                                <li>Peso: {this.state.vegetableright.status} kg.</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -356,14 +356,14 @@ export default class Products extends Component {
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "fruit.png"} alt={"frutacajonziquierdo.png"} height="100px" className="maxwidth" ></img></li>
                                                 <li><strong>Frutas del cajón izquierdo</strong></li>
-                                                <li>Peso: {this.state.fruitleft.status}</li>
+                                                <li>Peso: {this.state.fruitleft.status} kg.</li>
                                             </ul>
                                         </div>
                                         <div className="col-xl-2 col-md-3 col-sm-4 center-block">
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "fruit.png"} alt={"frutacajonzderecho.png"} height="100px" className="maxwidth" ></img></li>
                                                 <li><strong>Frutas del cajón derecho</strong></li>
-                                                <li>Peso: {this.state.fruitright.status}</li>
+                                                <li>Peso: {this.state.fruitright.status} kg.</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -375,7 +375,7 @@ export default class Products extends Component {
                                             <ul className="nopointul text-center">
                                                 <li><img src={process.env.REACT_APP_IMAGES + "refreshment.png"} alt={"refrescos.png"} height="100px" className="maxwidth"></img></li>
                                                 <li><strong>Refrescos</strong></li>
-                                                <li>Cantidad: {this.state.refreshment.status}</li>
+                                                <li>Cantidad: {this.state.refreshment.status} ud.</li>
                                             </ul>
                                         </div>
                                         {
@@ -384,7 +384,7 @@ export default class Products extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li>Cantidad: {product.amount}</li>
+                                                        <li>Cantidad: {product.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>
@@ -402,7 +402,7 @@ export default class Products extends Component {
                                                     <ul className="nopointul text-center">
                                                         <li><img src={product.imageUrl} alt={product.name + ".png"} height="100px" className="maxwidth"></img></li>
                                                         <li><strong>{product.name}</strong></li>
-                                                        <li>Cantidad: {product.amount}</li>
+                                                        <li>Cantidad: {product.amount} ud.</li>
                                                         <li><button style={{marginRight: 10}} className="btn btn-primary btn-sm" onClick={() => this.editProduct(product._id)}><span className="fas fa-edit"></span></button><button className="btn btn-danger btn-sm" onClick={() => this.deleteProduct(product._id , product.name)}><span className="fas fa-trash"></span></button></li>
                                                     </ul>
                                                 </div>

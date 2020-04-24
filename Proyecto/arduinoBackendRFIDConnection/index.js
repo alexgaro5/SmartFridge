@@ -23,9 +23,9 @@ server.bind(process.env.PORT_RASPBERRY_RFID_ARDUINO, process.env.IP_RASPBERRY);
 setInterval(() => CheckControllerStatus(), 3600000);
 
 //Comprobar cada hora si se ha seguido la dieta.
-//setInterval(() => CheckDietStatus(), 3600000);
-setInterval(() => CheckDietStatus(), 1000);
+setInterval(() => CheckDietStatus(), 3600000);
 
+//Obtenemos el dia y el momento del dia.
 var now = new Date();   
 var hour = now.getHours();
 var flagMorning, flagAfternoon, flagNight;
@@ -155,6 +155,8 @@ server.on('message', (str) => {
                             console.log(process.env.ERR_AMOUNT);
                         }else{
                             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.PRODUCT + contentRfid, {amount: product.data.amount - 1, end: "true"});
+                            
+                            //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
                             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                                 if(user.data.length != 0){
                                     axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.ACTIVITY + user.data[0]._id, {name: product.data.name, imageUrl: product.data.imageUrl});
@@ -163,13 +165,9 @@ server.on('message', (str) => {
                                     var day = now.getDay();
                                     var hour = now.getHours();
 
-                                    if(hour >= 8 && hour < 12){
-                                        hour = 0;
-                                    }else if(hour >= 12 && hour < 20){
-                                        hour = 1;
-                                    }else{
-                                        hour = 2;
-                                    }
+                                    if(hour >= 8 && hour < 12) hour = 0;
+                                    else if(hour >= 12 && hour < 20) hour = 1; 
+                                    else khour = 2;
                                    
                                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET2 + user.data[0]._id + "&" + product.data._id + "&" + day + "&" + hour).then(function(dietproduct){
                                         if(dietproduct.data.length != 0){
@@ -206,22 +204,8 @@ server.on('message', (str) => {
     }
 });
 
-//Se comprueba el tiempo que ha pasasdo desde la ultima conexión del controlador. Si es mayor a un día, se envía un aviso por correo.
-function CheckControllerStatus(){
-    const currentDate = new Date();
-    
-    if(lastDateConnection != null){
-        var difference = currentDate.getTime() - lastDateConnection.getTime();
-        difference = difference / 3600000;
-
-        if(difference >= 24 && sendemail){
-            sendemail = false;
-            sendEmail();
-        }
-    }
-}
-
-//Se comprueba el tiempo que ha pasasdo desde la ultima conexión del controlador. Si es mayor a un día, se envía un aviso por correo.
+//Dependiendo del momento del día, se va a enviar una petición para avisar de la tienda a seguir en esa parte del día, y también se revisa que en la
+//Parte del día anterior se haya consumido todo, si no, se avisa también.
 function CheckDietStatus(){
     var now = new Date();     
     var day = now.getDay();
@@ -239,6 +223,21 @@ function CheckDietStatus(){
         axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&1");
         flagNight = false;
         flagMorning = true;
+    }
+}
+
+//Se comprueba el tiempo que ha pasasdo desde la ultima conexión del controlador. Si es mayor a un día, se envía un aviso por correo.
+function CheckControllerStatus(){
+    const currentDate = new Date();
+    
+    if(lastDateConnection != null){
+        var difference = currentDate.getTime() - lastDateConnection.getTime();
+        difference = difference / 3600000;
+
+        if(difference >= 24 && sendemail){
+            sendemail = false;
+            sendEmail();
+        }
     }
 }
 
