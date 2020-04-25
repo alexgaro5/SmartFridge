@@ -70,7 +70,7 @@ server.on('message', (str) => {
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Fruta&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
-                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND2 + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 
                     });
                 } 
@@ -78,7 +78,7 @@ server.on('message', (str) => {
         }
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-            if(split[1] < result.data.minFruitWeight){
+            if(split[1] < result.data.minFruitWeight/1000){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "fruitleft", idProduct: "0", name: process.env.FRUITLEFTNAMESL, msg: process.env.FRUITLEFTEMPTY, imageUrl: process.env.FRUIT_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitleft&0&true");
@@ -108,7 +108,7 @@ server.on('message', (str) => {
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Fruta&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
-                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND2 + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 
                     });
                 } 
@@ -116,7 +116,7 @@ server.on('message', (str) => {
         }
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-            if(split[1] < result.data.minFruitWeight){
+            if(split[1] < result.data.minFruitWeight/1000){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "fruitright", idProduct: "0", name: process.env.FRUITRIGHTNAMESL, msg: process.env.FRUITRIGHTEMPTY, imageUrl: process.env.FRUIT_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "fruitright&0&true");

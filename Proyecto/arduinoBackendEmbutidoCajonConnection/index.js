@@ -91,7 +91,7 @@ server.on('message', (str) => {
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Embutido&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
-                            axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
+                            axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIETFRONTEND2 + dietproduct.data[0]._id, {remainingAmount: dietproduct.data[0].remainingAmount - 1, end: "true"});
                         } 
                     });
                 } 
@@ -100,7 +100,7 @@ server.on('message', (str) => {
 
         //Si el peso está por debajo de un mínimo, se va a añadir a la lista de la compra, si no es el caso, se va a eliminar de ella.
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
-            if(split[1] < result.data.minSausageWeight){
+            if(split[1] < result.data.minSausageWeight/1000){
                 axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "sausage", idProduct: "0", name: process.env.SAUSAGESNAMESL, msg: process.env.SAUSAGESEMPTY, imageUrl: process.env.SAUSAGE_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&true");
