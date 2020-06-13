@@ -69,15 +69,12 @@ loginCtrl.loginWithCard = async (req, res) => {
  * Devolución del método: Nada.
 */
 loginCtrl.disconnecUser = async (req, res) => {
-    const end = req.params.end;
 
     await User.updateMany({online: true}, {
         online: false
     });
 
-    if(end == 'true'){
-        res.end();
-    }
+    res.end();
 };
 
 module.exports = loginCtrl;

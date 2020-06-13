@@ -30,7 +30,7 @@ recoverCtrl.changePassword  = async (req, res) => {
                 res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?msg=wrongpassword&email='+email);
             }
         }else{
-            res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/login'); 
+            res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/recover?msg=wrongsecuritypassword&email='+email); 
         }
     }
 }

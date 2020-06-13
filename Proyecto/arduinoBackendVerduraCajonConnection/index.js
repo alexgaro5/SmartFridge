@@ -66,7 +66,7 @@ server.on('message', (str) => {
 
                     if(hour >= 8 && hour < 12) hour = 0;
                     else if(hour >= 12 && hour < 20) hour = 1; 
-                    else khour = 2;
+                    else hour = 2;
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
@@ -104,7 +104,7 @@ server.on('message', (str) => {
 
                     if(hour >= 8 && hour < 12) hour = 0;
                     else if(hour >= 12 && hour < 20) hour = 1; 
-                    else khour = 2;
+                    else hour = 2;
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Verdura&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){

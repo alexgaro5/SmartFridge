@@ -27,7 +27,8 @@ export function isAdminConnected() {
       }
       if (c.indexOf(name) === 0) {
         var substr = c.substring(name.length, c.length);
-        if(substr === '5e6184330e85e2546cfca8ea'){
+        //if(substr === '5ec3b9caa9403b0f589d9e1c'){
+	if(substr === '5e6184330e85e2546cfca8ea'){
             return true;
         };
       }

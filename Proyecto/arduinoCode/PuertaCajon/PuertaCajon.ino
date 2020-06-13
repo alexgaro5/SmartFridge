@@ -29,7 +29,8 @@ int localPort = 41237;  //Puerto para tener conexión entre el backend y la ardu
 
 //Las variables para el paquete para enviar, los pesos a usar con su factor de calibración y el nivel
 WiFiUDP Udp;
-HX711 peso1, peso2, peso3, peso4, peso5, peso6;
+HX711 peso1;
+HX711 peso2, peso3, peso4, peso5, peso6;
 float pesoKg1, anteriorPesoKg1, pesoKg2, anteriorPesoKg2, pesoKg3, anteriorPesoKg3, pesoKg4, anteriorPesoKg4, pesoKg5, anteriorPesoKg5, pesoKg6, anteriorPesoKg6;
 float factorDeCalibracion1 = -24000;
 float factorDeCalibracion2 = -24000;

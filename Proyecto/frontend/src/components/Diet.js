@@ -65,7 +65,7 @@ export default class Diet extends Component {
         var day = now.getDay();
         var hour = now.getHours();
         
-        if(hour >= 8 && hour < 12){
+        if(hour >= 0 && hour < 12){
             this.setState({partOfDaySelected: 0});
         }else if(hour >= 12 && hour < 20){
             this.setState({partOfDaySelected: 1});

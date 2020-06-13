@@ -95,7 +95,7 @@ void setup() {
 
 void loop() {
 
-
+  Serial.println("Hola");
   if((millis() - previousMillis) > 28800000){
     Udp.beginPacket(ipSend, localPort);
     Udp.write("A");

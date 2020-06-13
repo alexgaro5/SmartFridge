@@ -25,7 +25,6 @@ setInterval(() => CheckControllerStatus(), 3600000);
 //Si hay algún error en la conexión, nos informará por consola cual es.
 server.on('error', (err) => {
     console.log(`server error:\n${err.stack}`);
-    server.close();
 });
 
 //Si la conexión se crea con éxito, nos lo notificará por consola.
@@ -61,10 +60,10 @@ server.on('message', (str) => {
     }
 
     if(split[0] == 'M'){
-        //Si es 0, significa que no hay agua, por lo que se va a actualizar el estado y añadir a la lista de la compra.
-        if(split[1] == 1){
+        //Si es 1, significa que la puerta se ha cerrado, por lo que se va a actualizar el estado del usuario a desconectado.
+        if(split[1] == "1"){
             console.log("Frigorífico cerrado.");
-            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN, {end: "true"});
+            axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN);
         }
     }
 
@@ -75,7 +74,6 @@ server.on('message', (str) => {
         
         if((lastSausageWeight - 0.30) >= split[1]){
             lastSausageWeight = split[1];
-            
             //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
             axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                 if(user.data.length != 0){
@@ -87,7 +85,7 @@ server.on('message', (str) => {
 
                     if(hour >= 8 && hour < 12) hour = 0;
                     else if(hour >= 12 && hour < 20) hour = 1; 
-                    else khour = 2;
+                    else hour = 2;
 
                     axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Embutido&" + day + "&" + hour).then(function(dietproduct){
                         if(dietproduct.data.length != 0){
@@ -101,7 +99,7 @@ server.on('message', (str) => {
         //Si el peso está por debajo de un mínimo, se va a añadir a la lista de la compra, si no es el caso, se va a eliminar de ella.
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
             if(split[1] < result.data.minSausageWeight/1000){
-                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "sausage", idProduct: "0", name: process.env.SAUSAGESNAMESL, msg: process.env.SAUSAGESEMPTY, imageUrl: process.env.SAUSAGE_IMG_URL, end: "true"});
+                axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST, {id: "sausage", idProduct: "0", name: process.env.SAUSAGENAMESL, msg: process.env.SAUSAGEEMPTY, imageUrl: process.env.SAUSAGE_IMG_URL, end: "true"});
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "sausage&0&true");
             }

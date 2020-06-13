@@ -54,11 +54,13 @@ server.on('message', (str) => {
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
         
-            const unit = Math.ceil(split[1] / result.data.weightPerEgg);
+            const weight = parseFloat(split[1]);
+            const minWeight = result.data.weightPerEgg/1000;
+            const unit =  Math.trunc(weight/minWeight);
+        
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.EGG, {"status": unit});
             
             if(lastEggUnit > unit){
-                lastEggUnit = unit;
                 
                 //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
@@ -71,7 +73,7 @@ server.on('message', (str) => {
 
                         if(hour >= 8 && hour < 12) hour = 0;
                         else if(hour >= 12 && hour < 20) hour = 1; 
-                        else khour = 2;
+                        else hour = 2;
 
                         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Huevo&" + day + "&" + hour).then(function(dietproduct){
                             if(dietproduct.data.length != 0){
@@ -88,6 +90,7 @@ server.on('message', (str) => {
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "egg&0&true");
             }
 
+            lastEggUnit = unit;
         });
     }
 
@@ -96,12 +99,14 @@ server.on('message', (str) => {
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
 
-            const unit = Math.ceil(split[1] / result.data.weightPerRefreshment);
+            const weight = parseFloat(split[1]);
+            const minWeight = result.data.weightPerRefreshment/1000;
+            const unit =  Math.trunc(weight/minWeight);
+
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.REFRESHMENT, {"status": unit});
 
             if(lastRefreshmentUnit > unit){
-                lastRefreshmentUnit = unit;
-                
+
                 //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
                     if(user.data.length != 0){
@@ -113,7 +118,7 @@ server.on('message', (str) => {
 
                         if(hour >= 8 && hour < 12) hour = 0;
                         else if(hour >= 12 && hour < 20) hour = 1; 
-                        else khour = 2;
+                        else hour = 2;
 
                         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Refresco&" + day + "&" + hour).then(function(dietproduct){
                             if(dietproduct.data.length != 0){
@@ -129,7 +134,8 @@ server.on('message', (str) => {
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "refreshment&0&true");
             }
-
+		
+	        lastRefreshmentUnit = unit;
         });
     }
 
@@ -138,11 +144,13 @@ server.on('message', (str) => {
 
         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.VARIABLE).then(function(result){
 
-            const unit = Math.ceil(split[1] / result.data.weightPerMilk);
+	    const weight = parseFloat(split[1]);
+            const minWeight = result.data.weightPerMilk/1000;
+            const unit =  Math.trunc(weight/minWeight);
+
             axios.post("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.MILK, {"status": unit});
 
             if(lastMilkUnit > unit){
-                lastMilkUnit = unit;
                 
                 //Si hay algun usuario coenctado, se va a guardar en su actividad el producto consumido, y si está en la dieta de ese día, se va a aplicar como consumido.
                 axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.LOGIN).then(function(user){
@@ -155,7 +163,7 @@ server.on('message', (str) => {
 
                         if(hour >= 8 && hour < 12) hour = 0;
                         else if(hour >= 12 && hour < 20) hour = 1; 
-                        else khour = 2;
+                        else hour = 2;
 
                         axios.get("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + user.data[0]._id + "&Leche&" + day + "&" + hour).then(function(dietproduct){
                             if(dietproduct.data.length != 0){
@@ -171,7 +179,8 @@ server.on('message', (str) => {
             }else{
                 axios.delete("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.SHOPPINGLIST + "milk&0");
             }
-
+            
+            lastMilkUnit = unit;
         });
     }
 });
@@ -226,3 +235,11 @@ function sendEmail(req, res){
         }
     });
 };
+
+function pausecomp(millis)
+{
+    var date = new Date();
+    var curDate = null;
+    do { curDate = new Date(); }
+    while(curDate-date < millis);
+}

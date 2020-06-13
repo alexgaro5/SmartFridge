@@ -25,7 +25,7 @@ export default class Navigation extends Component {
     getUser = async () => {
         const usr = document.cookie.toString().split("=")[1];
         if(usr !== undefined){
-            const usrObj = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER + usr + "&false");
+            const usrObj = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USERFRIDGE + usr + "&false");
             this.setState({usr: usrObj.data});
         }
     }

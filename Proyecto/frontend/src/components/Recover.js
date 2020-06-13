@@ -14,6 +14,7 @@ export default class Recover extends Component {
     //Si hay algún mensaje que mostrar (si viene alguno en la dirección web), se devolverá este mensaje para mostrarlo.
     Anuncio(){
         if(this.vars['msg'] != null){
+            if(this.vars['msg'] === 'wrongsecuritypassword') this.message = <div className="alert alert-danger text-center">{process.env.REACT_APP_NO_SECURITY_PASSWORD}</div>;
             if(this.vars['msg'] === 'wrongpassword') this.message = <div className="alert alert-danger text-center">{process.env.REACT_APP_SAME_PASS}</div>;
             if(this.vars['msg'] === 'success') this.message = <div className="alert alert-success text-center">{process.env.REACT_APP_PASS_CHANGED}</div>;
             return this.message;

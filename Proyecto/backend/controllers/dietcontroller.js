@@ -195,13 +195,8 @@ dietCtrl.checkAmount = async (req, res) => {
     users.map(async user => {
 
         //Obtenemos el dia y la parte del día actual.
-        var day = now.getDay().toString();
-        const hour = now.getHours();
-        var partOfDay;
-
-        if(hour >= 8 && hour < 12) partOfDay = "0";
-        else if(hour >= 12 && hour < 20) partOfDay = "1";
-        else if(flagNight) partOfDay = "2";
+        var day = req.params.day;
+        var partOfDay = req.params.partOfDay;
 
         const email = user.email;
         const productNames = [];
@@ -236,8 +231,16 @@ dietCtrl.checkAmount = async (req, res) => {
 
         //Actuializamos el dia y la parte del dia con los que nos pasan por parámetro para comprobar si alguien tiene algun producto sin consumir en su dieta
         //en el dia y parte del  dia especificado.
-        var day2 = req.params.day;
-        var partOfDay2 = req.params.partOfDay;
+        if(partOfDay == 0){
+            var day2 = (req.params.day - 1).toString();
+            var partOfDay2 = "2";
+        }else if(partOfDay == 1){
+            var day2 = req.params.day.toString();
+            var partOfDay2 = "0";
+        }else if(partOfDay == 2){
+            var day2 = req.params.day.toString();
+            var partOfDay2 = "1";
+        }
 
         //Buscamos los productos del usuario en el dia y parte del dia especificado.-
         const products2 = await Diet.find({userId: user._id, day: day2, partOfDay: partOfDay2});

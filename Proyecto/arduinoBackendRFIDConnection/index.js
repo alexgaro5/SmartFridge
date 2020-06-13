@@ -23,14 +23,15 @@ server.bind(process.env.PORT_RASPBERRY_RFID_ARDUINO, process.env.IP_RASPBERRY);
 setInterval(() => CheckControllerStatus(), 3600000);
 
 //Comprobar cada hora si se ha seguido la dieta.
-setInterval(() => CheckDietStatus(), 3600000);
+//setInterval(() => CheckDietStatus(), 3600000);
+setInterval(() => CheckDietStatus(), 2000);
 
 //Obtenemos el dia y el momento del dia.
 var now = new Date();   
 var hour = now.getHours();
 var flagMorning, flagAfternoon, flagNight;
 
-if(hour >= 8 && hour < 12){
+if(hour >= 0 && hour < 12){
     flagMorning = true;
 }else if(hour >= 12 && hour < 20){
     flagAfternoon = true;
@@ -211,16 +212,16 @@ function CheckDietStatus(){
     var day = now.getDay();
     var hour = now.getHours();
     
-    if(hour >= 8 && hour < 12 && flagMorning){
-        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + (day-1) + "&2");
+    if(hour >= 0 && hour < 12 && flagMorning){
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&0");
         flagMorning = false;
         flagAfternoon = true;
     }else if(hour >= 12 && hour < 20 && flagAfternoon){
-        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&0");
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&1");
         flagAfternoon = false;
         flagNight = true;
-    }else if((hour >= 20 || hour < 8) && bflagNight){
-        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&1");
+    }else if((hour >= 20) && bflagNight){
+        axios.put("http://" + process.env.IP_RASPBERRY + process.env.PORT_BACKEND + process.env.DIET + day + "&2");
         flagNight = false;
         flagMorning = true;
     }

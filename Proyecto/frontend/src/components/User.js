@@ -17,7 +17,7 @@ export default class User extends Component {
 
     //Envia la petición para obtener todos los usuarios registrados.
     getUsers = async () => {
-        const res = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER);
+        const res = await axios.get(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USERFRIDGE);
         this.setState({users: res.data});
     }
 
@@ -35,7 +35,7 @@ export default class User extends Component {
         if(name === "admin"){
             window.alert(process.env.REACT_APP_NO_ADMIN_DELETE)
         }else if (window.confirm(process.env.REACT_APP_CONFIRM_DELETE_USER + "'" + name + "'?")) {
-            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER + id);
+            await axios.delete(process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USERFRIDGE + id);
             this.getUsers();
         }
     }
@@ -90,7 +90,7 @@ export default class User extends Component {
                                     
                                     <div className="card-body">
 
-                                    <form action={process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER} method="post">
+                                    <form action={process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USERFRIDGE} method="post">
                                         <div className="form-group">
                                             <label htmlFor="email">Email:</label>
                                             <input type="email" name="email" className="form-control" required/>

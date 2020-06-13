@@ -17,7 +17,7 @@ int error = 9;
 
 //Creamos las variables necesarias.
 char ipSend[] = "192.168.1.225";  //Raspberry IP
-IPAddress ipReceive(192, 168, 1, 226);  //Arduino IP
+  
 int status = WL_IDLE_STATUS;
 char ssid[] = "WLAN_COLETO";  //SSID del WiFi
 char pass[] = "4eddec6e8465458a4096"; //Contraseña del WiFi

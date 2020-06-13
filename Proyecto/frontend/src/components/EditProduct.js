@@ -36,7 +36,8 @@ export default class EditProduct extends Component {
     //Si hay algún mensaje que mostrar (si viene alguno en la dirección web), se devolverá este mensaje para mostrarlo.
     Anuncio(){  
         if(this.vars['msg'] != null){
-        if(this.vars['msg'] === 'success') this.message = <div className="alert alert-success text-center">{process.env.REACT_APP_EDITPRODUCT_SUCCESS}</div>;
+            if(this.vars['msg'] === 'samename') this.message = <div className="alert alert-danger text-center">{process.env.REACT_APP_SAME_PRODUCT}</div>;
+            if(this.vars['msg'] === 'success') this.message = <div className="alert alert-success text-center">{process.env.REACT_APP_EDITPRODUCT_SUCCESS}</div>;
             return this.message;
         }
         return null;

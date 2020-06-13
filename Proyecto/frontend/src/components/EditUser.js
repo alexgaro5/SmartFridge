@@ -15,7 +15,7 @@ export default class EditUser extends Component {
     }
     message = '';
     vars = getUrlVariables();
-    update = process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USER + this.vars['user'];
+    update = process.env.REACT_APP_IP_RASPBERRY + process.env.REACT_APP_PORT_BACKEND + process.env.REACT_APP_USERFRIDGE + this.vars['user'];
 
     //Obtendrá el usuario que tenga la ID que hemos obtenido y la guardará en "product" para editarla mas tarde.
     getUser = async () => {

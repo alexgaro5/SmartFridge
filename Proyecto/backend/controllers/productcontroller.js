@@ -97,7 +97,14 @@ productCtrl.updateProduct = async (req, res) => {
     //que tienen ese nombre anterior, y las actualizamos con el nombre nuevo. 
     if(name != null){
         name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-        pr.name = name;
+
+        const pr2 = await Product.findOne({name: name});
+
+        if(pr2 == null){
+            pr.name = name;
+        }else if(pr2._id.toString() != pr._id.toString()){
+            return res.redirect('//' + process.env.IP_RASPBERRY + process.env.PORT_FRONTEND + '/editproduct?msg=samename&product='+req.params.id);
+        }
     }
 
     if(url != "" && end == "false"){
